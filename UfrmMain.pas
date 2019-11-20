@@ -8,13 +8,6 @@ uses
   CPortCtl, ToolWin, inifiles, CPort,StrUtils, DB, ADODB, ActnList, DosMove,
   FR_Class;
 
-//==为了通过发送消息更新主窗体状态栏而增加==//
-const
-  WM_UPDATETEXTSTATUS=WM_USER+1;
-TYPE
-  TWMUpdateTextStatus=TWMSetText;
-//=========================================//
-
 type
   TfrmMain = class(TForm)
     TimerRefreshShow: TTimer;
@@ -131,18 +124,16 @@ type
     ComLed1: TComLed;
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
-    SpeedButton3: TSpeedButton;
-    SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
     SpeedButton6: TSpeedButton;
-    BitBtn4: TBitBtn;
-    BitBtn5: TBitBtn;
     Panel33: TPanel;
     SpeedButton7: TSpeedButton;
-    SpeedButton8: TSpeedButton;
     frReport1: TfrReport;
     Panel34: TPanel;
     SpeedButton9: TSpeedButton;
+    LabeledEdit19: TLabeledEdit;
+    ProgressBar1: TProgressBar;
+    Timer1: TTimer;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -161,8 +152,6 @@ type
     procedure updateEdit;
     procedure ClearEdit;
     procedure BitBtn7Click(Sender: TObject);
-    procedure SpeedButton3Click(Sender: TObject);
-    procedure SpeedButton4Click(Sender: TObject);
     procedure SpeedButton5Click(Sender: TObject);
     procedure ADOQuery2AfterOpen(DataSet: TDataSet);
     procedure SpeedButton6Click(Sender: TObject);
@@ -174,21 +163,14 @@ type
       TComException: TComExceptions; ComportMessage: String;
       WinError: Int64; WinMessage: String);
     procedure SpeedButton7Click(Sender: TObject);
-    procedure SpeedButton8Click(Sender: TObject);
     procedure frReport1GetValue(const ParName: String;
       var ParValue: Variant);
     procedure SpeedButton9Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
     { Private declarations }
     ifnewadd:boolean;
-    
-    //==为了通过发送消息更新主窗体状态栏而增加==//
-    procedure WMUpdateTextStatus(var message:twmupdatetextstatus);  {WM_UPDATETEXTSTATUS消息处理函数}
-                                              message WM_UPDATETEXTSTATUS;
-    procedure updatestatusBar(const text:string);//Text为该格式#$2+'0:abc'+#$2+'1:def'表示状态栏第0格显示abc,第1格显示def,依此类推
-    //==========================================//
     procedure updateAdoQuery1;
-    function CheckMan: boolean;//20080130
     procedure update_Ado_dtl;
   public
     { Public declarations }
@@ -199,7 +181,7 @@ var
 
 implementation
 
-uses UDM, UfrmLogin;
+uses UDM;
 
 var
   ifReadParam:boolean;
@@ -213,6 +195,8 @@ var
   W_U_Specified:integer;//额定电压
   F_HZ_Specified:Double;//额定频率
   W_ActP_Specified:integer;//额定功率
+
+  iProgressBar:integer;
 
 {$R *.dfm}
 
@@ -453,8 +437,6 @@ procedure TfrmMain.FormShow(Sender: TObject);
 var
   configini:tinifile;
 begin
-  frmLogin.ShowModal;
-
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
   cbCOMM.Text:=ConfigIni.ReadString('Interface','COM','COM1');
@@ -488,34 +470,6 @@ begin
     ComPort1.Open;
   except
   end;
-end;
-
-procedure TfrmMain.updatestatusBar(const text: string);
-//Text为该格式#$2+'0:abc'+#$2+'1:def'表示状态栏第0格显示abc,第1格显示def,依此类推
-var
-  i,J2Pos,J2Len,TextLen,j:integer;
-  tmpText:string;
-begin
-  TextLen:=length(text);
-  for i :=0 to StatusBar1.Panels.Count-1 do
-  begin
-    J2Pos:=pos(#$2+inttostr(i)+':',text);
-    J2Len:=length(#$2+inttostr(i)+':');
-    if J2Pos<>0 then
-    begin
-      tmpText:=text;
-      tmpText:=copy(tmpText,J2Pos+J2Len,TextLen-J2Pos-J2Len+1);
-      j:=pos(#$2,tmpText);
-      if j<>0 then tmpText:=leftstr(tmpText,j-1);
-      StatusBar1.Panels[i].Text:=tmpText;
-    end;
-  end;
-end;
-
-procedure TfrmMain.WMUpdateTextStatus(var message: twmupdatetextstatus);
-begin
-  UpdateStatusBar(pchar(message.Text));
-  message.Result:=-1;
 end;
 
 procedure TfrmMain.BitBtn6Click(Sender: TObject);
@@ -572,7 +526,7 @@ begin
     else adotemp11.Parameters.ParamByName('HighPotTest').Value:=null;
     adotemp11.Parameters.ParamByName('AVRModel').Value:=trim(LabeledEdit17.Text);
     adotemp11.Parameters.ParamByName('AVRNo').Value:=trim(LabeledEdit18.Text);
-    adotemp11.Parameters.ParamByName('Tester').Value:=operator_name;
+    adotemp11.Parameters.ParamByName('Tester').Value:=trim(LabeledEdit19.Text);
     adotemp11.ExecSQL;
     ADOQuery1.Requery([]);
 
@@ -597,7 +551,8 @@ begin
     adotemp11.Close;
     adotemp11.SQL.Clear;
     adotemp11.SQL.Text:=' Update Test_Master  '+
-    '  set BenchNo=:BenchNo,PartNo=:PartNo,OrderVolt=:OrderVolt,Model=:Model,SerialNo=:SerialNo,OrderP=:OrderP,ExcStatorO=:ExcStatorO,MainStatorO=:MainStatorO,OrderHZ=:OrderHZ,Remark=:Remark,HighPotTest=:HighPotTest,AVRModel=:AVRModel,AVRNo=:AVRNo  '+
+    '  set BenchNo=:BenchNo,PartNo=:PartNo,OrderVolt=:OrderVolt,Model=:Model,SerialNo=:SerialNo,OrderP=:OrderP,'+
+    '  ExcStatorO=:ExcStatorO,MainStatorO=:MainStatorO,OrderHZ=:OrderHZ,Remark=:Remark,HighPotTest=:HighPotTest,AVRModel=:AVRModel,AVRNo=:AVRNo,Tester=:Tester '+
     '  Where    Unid=:Unid  ';
     adotemp11.Parameters.ParamByName('BenchNo').Value:=trim(LabeledEdit6.Text);
     adotemp11.Parameters.ParamByName('PartNo').Value:=trim(LabeledEdit7.Text);
@@ -624,6 +579,7 @@ begin
     else adotemp11.Parameters.ParamByName('HighPotTest').Value:=null;
     adotemp11.Parameters.ParamByName('AVRModel').Value:=trim(LabeledEdit17.Text);
     adotemp11.Parameters.ParamByName('AVRNo').Value:=trim(LabeledEdit18.Text);
+    adotemp11.Parameters.ParamByName('Tester').Value:=trim(LabeledEdit19.Text);
     adotemp11.Parameters.ParamByName('Unid').Value:=Insert_Identity;
     adotemp11.ExecSQL;
     AdoQuery1.Refresh;
@@ -639,10 +595,10 @@ begin
   adoquery1.Close;
   adoquery1.SQL.Clear;
 
-  adoquery1.SQL.Text:='select BenchNo as 实验台号,PartNo as 物料号,Create_Time as 创建时间,Auditor as 审核者,OrderVolt as 订单电压,Model as 型号,SerialNo as 序列号,'+
+  adoquery1.SQL.Text:='select Unid as 测试号,Create_Time as 创建时间,BenchNo as 实验台号,PartNo as 物料号,OrderVolt as 订单电压,Model as 型号,SerialNo as 序列号,'+
                       'OrderP as 订单功率,ExcStatorO as 励磁定子电阻,MainStatorO as 主定子电阻,OrderHZ as 订单频率,Remark as 备注,'+
                       'HighPotTest as 高压测试,AVRModel as AVR型号,AVRNo as AVR编号,Tester as 测试者,TestDate as 测试日期,'+
-                      'Audit_Date as 审核时间,Unid as 唯一编号 from Test_Master';
+                      'Auditor as 审核者,Audit_Date as 审核时间 from Test_Master';
   adoquery1.Open;
 end;
 
@@ -655,6 +611,8 @@ begin
   ifSetU:=false;
   ifSetActP:=false;
 
+  iProgressBar:=0;
+
   ADOQuery1.Connection:=dm.ADOConnection1;
   ADOQuery2.Connection:=dm.ADOConnection1;
 end;
@@ -662,9 +620,9 @@ end;
 procedure TfrmMain.ADOQuery1AfterOpen(DataSet: TDataSet);
 begin
   if not DataSet.Active then exit;
-  dbgrid1.Columns.Items[0].Width:=60;
-  dbgrid1.Columns.Items[1].Width:=60;
-  dbgrid1.Columns.Items[2].Width:=140;
+  dbgrid1.Columns.Items[0].Width:=45;
+  dbgrid1.Columns.Items[1].Width:=140;
+  dbgrid1.Columns.Items[2].Width:=60;
   dbgrid1.Columns.Items[3].Width:=60;
   dbgrid1.Columns.Items[4].Width:=60;
   dbgrid1.Columns.Items[5].Width:=60;
@@ -717,6 +675,7 @@ begin
   labelededit16.Clear;
   labelededit17.Clear;
   labelededit18.Clear;
+  labelededit19.Clear;
 end;
 
 procedure TfrmMain.BitBtn7Click(Sender: TObject);
@@ -732,80 +691,14 @@ begin
     updateEdit;
 end;
 
-procedure TfrmMain.SpeedButton3Click(Sender: TObject);
-//审核
-var
-  unid,RecNum:integer;
-begin
-  if not ADOQuery1.Active then exit;
-  if ADOQuery1.RecordCount=0 then exit;
-
-  unid:=ADOQuery1.fieldbyname('唯一编号').AsInteger;
-
-  RecNum:=strtoint(ScalarSQLCmd(LisConn,'select count(*) as RecNum from Test_Slave where pkunid='+inttostr(unid)));
-  if RecNum<=0 then
-  begin
-    MESSAGEDLG('无测试结果,不允许审核!',mtError,[mbOK],0);
-    exit;
-  end;
-
-   if (trim(ADOQuery1.FieldByName('审核者').AsString)<>operator_name) and (trim(ADOQuery1.FieldByName('审核者').AsString)<>'') then
-   begin
-      if MessageDlg('已被审核过，想修改审核者？', mtWarning	, [mbNo,mbYes], 0 ) = mrNo then  exit;
-   end;
-
-  ExecSQLCmd(LisConn,'update Test_Master set Auditor='''+operator_name+''',Audit_Date=Now() where unid='+inttostr(unid));
-
-  ADOQuery1.Refresh; //刷新界面
-end;
-
-procedure TfrmMain.SpeedButton4Click(Sender: TObject);
-//取消审核
-var
-  unid:integer;
-begin
-  if not ADOQuery1.Active then exit;
-  if not ADOQuery1.RecordCount=0 then exit;
-  if trim(DBGrid1.DataSource.DataSet.FieldByName('审核者').AsString)='' then exit;
-
-  unid:=ADOQuery1.fieldbyname('唯一编号').AsInteger;
-
-  if not checkman then
-  begin
-          MESSAGEDLG('非您审核，无权修改!',MTINFORMATION,[MBOK],0);
-          exit;
-  end;
-
-  ExecSQLCmd(LisConn,'update Test_Master set Auditor='''',Audit_Date=null where unid='+inttostr(unid));
-
-  ADOQuery1.Refresh; //刷新界面
-end;
-
-function TfrmMain.CheckMan: boolean;//20080130
-//var
-//  adotemp12:tadoquery;
-//  ifSuperUser:boolean;
-begin
-  result:=false;
-  if trim(DBGrid1.DataSource.DataSet.FieldByName('审核者').AsString)='' then begin result:=true;exit; end;
-  //adotemp12:=tadoquery.Create(nil);
-  //adotemp12.Connection:=DM.ADOConnection1;
-  //adotemp12.Close;
-  //adotemp12.SQL.Clear;
-  //adotemp12.SQL.Text:='select * from worker where ifSuperUser=''1'' ';
-  //adotemp12.Open;
-  //ifSuperUser:=adotemp12.Locate('id',trim(operator_id),[loCaseInsensitive]);
-  //adotemp12.Free;
-  //if ifSuperUser then begin result:=true;exit; end;
-  if uppercase(trim(DBGrid1.DataSource.DataSet.FieldByName('审核者').AsString))=uppercase(trim(operator_name)) then result:=true;
-end;
-
 procedure TfrmMain.SpeedButton5Click(Sender: TObject);
 var
   adotemp11,adotemp22:tadoquery;
   sqlstr:string;
   Insert_Identity:integer;
 begin
+  Timer1.Enabled:=true;
+
   adotemp11:=tadoquery.Create(nil);
   adotemp11.Connection:=DM.ADOConnection1;
 
@@ -815,7 +708,7 @@ begin
     adotemp11.Close;
     adotemp11.SQL.Clear;
     adotemp11.SQL.Add(sqlstr);
-    adotemp11.Parameters.ParamByName('PkUnid').Value:=self.ADOQuery1.fieldbyname('唯一编号').AsInteger;
+    adotemp11.Parameters.ParamByName('PkUnid').Value:=self.ADOQuery1.fieldbyname('测试号').AsInteger;
     adotemp11.Parameters.ParamByName('OutU_UV').Value:=RrcDGS9510.OutU_UV;
     adotemp11.Parameters.ParamByName('OutU_VW').Value:=RrcDGS9510.OutU_VW;
     adotemp11.Parameters.ParamByName('OutU_WU').Value:=RrcDGS9510.OutU_WU;
@@ -828,7 +721,7 @@ begin
     adotemp11.Parameters.ParamByName('Exc_V').Value:=RrcDGS9510.Exc_V;
     adotemp11.Parameters.ParamByName('Exc_A').Value:=RrcDGS9510.Exc_A;
     adotemp11.Parameters.ParamByName('PS_HZ').Value:=RrcDGS9510.PS_HZ;
-    adotemp11.Parameters.ParamByName('Operator').Value:=operator_name;
+    adotemp11.Parameters.ParamByName('Operator').Value:=null;
     adotemp11.Parameters.ParamByName('ActP_Specified').Value:=RrcDGS9510.ActP_Specified;
     adotemp11.ExecSQL;
     ADOQuery2.Requery([]);
@@ -864,7 +757,7 @@ begin
   ADOQuery2.SQL.Clear;
   ADOQuery2.SQL.Text:=strsql11;
   ADOQuery2.Parameters.ParamByName('pkunid').Value :=
-      ADOQuery1.FieldByName('唯一编号').AsInteger;
+      ADOQuery1.FieldByName('测试号').AsInteger;
   try
     ADOQuery2.Open;
   except
@@ -880,7 +773,20 @@ end;
 
 procedure TfrmMain.SpeedButton6Click(Sender: TObject);
 begin
-//
+  if not ADOQuery1.Active then exit;
+  if ADOQuery1.RecordCount<=0 then exit;
+  
+  if not ADOQuery2.Active then exit;
+  if ADOQuery2.RecordCount<=0 then exit;
+
+  if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'DGS9510TestPF.frf') then
+  begin
+    showmessage('加载打印模板DGS9510TestPF.frf失败');
+    exit;
+  end;
+  
+  frReport1.ShowPrintDialog:=true;
+  frReport1.ShowReport;
 end;
 
 procedure TfrmMain.BitBtn2Click(Sender: TObject);
@@ -913,24 +819,6 @@ end;
 procedure TfrmMain.SpeedButton7Click(Sender: TObject);
 begin
   close;
-end;
-
-procedure TfrmMain.SpeedButton8Click(Sender: TObject);
-begin
-  if not ADOQuery1.Active then exit;
-  if ADOQuery1.RecordCount<=0 then exit;
-  
-  if not ADOQuery2.Active then exit;
-  if ADOQuery2.RecordCount<=0 then exit;
-
-  if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'DGS9510TestPF.frf') then
-  begin
-    showmessage('加载打印模板DGS9510TestPF.frf失败');
-    exit;
-  end;
-  
-  frReport1.ShowPrintDialog:=true;
-  frReport1.ShowReport;
 end;
 
 procedure TfrmMain.frReport1GetValue(const ParName: String;
@@ -1066,6 +954,20 @@ begin
   if (MessageDlg('确实要删除该记录吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
   
   ADOQuery2.Delete;
+end;
+
+procedure TfrmMain.Timer1Timer(Sender: TObject);
+begin
+  inc(iProgressBar);
+  
+  ProgressBar1.Position:=iProgressBar;
+
+  if iProgressBar=10 then
+  begin
+    (Sender as TTimer).Enabled:=false;
+    iProgressBar:=0;
+    if (MessageDlg('是否保存此次采集结果？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
+  end;
 end;
 
 end.

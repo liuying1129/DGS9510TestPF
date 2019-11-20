@@ -66,24 +66,6 @@ object frmMain: TfrmMain
       Caption = #21024#38500#27979#35797#21333
       OnClick = BitBtn7Click
     end
-    object SpeedButton3: TSpeedButton
-      Left = 176
-      Top = 154
-      Width = 70
-      Height = 40
-      Caption = #23457#26680
-      Visible = False
-      OnClick = SpeedButton3Click
-    end
-    object SpeedButton4: TSpeedButton
-      Left = 176
-      Top = 194
-      Width = 70
-      Height = 40
-      Caption = #21462#28040#23457#26680
-      Visible = False
-      OnClick = SpeedButton4Click
-    end
     object SpeedButton6: TSpeedButton
       Left = 176
       Top = 261
@@ -241,7 +223,7 @@ object frmMain: TfrmMain
       Width = 70
       Height = 40
       Caption = #20445#23384#27979#35797#21333
-      TabOrder = 13
+      TabOrder = 14
       OnClick = BitBtn14Click
     end
     object GroupBox7: TGroupBox
@@ -257,7 +239,7 @@ object frmMain: TfrmMain
       Font.Name = #23435#20307
       Font.Style = []
       ParentFont = False
-      TabOrder = 14
+      TabOrder = 15
       object Label31: TLabel
         Left = 186
         Top = 116
@@ -402,6 +384,17 @@ object frmMain: TfrmMain
         OnClick = BitBtn2Click
       end
     end
+    object LabeledEdit19: TLabeledEdit
+      Left = 84
+      Top = 304
+      Width = 90
+      Height = 21
+      EditLabel.Width = 39
+      EditLabel.Height = 13
+      EditLabel.Caption = #27979#35797#20154
+      LabelPosition = lpLeft
+      TabOrder = 13
+    end
   end
   object Panel32: TPanel
     Left = 249
@@ -465,8 +458,8 @@ object frmMain: TfrmMain
     Align = alRight
     TabOrder = 3
     object Label26: TLabel
-      Left = 55
-      Top = 475
+      Left = 189
+      Top = 16
       Width = 73
       Height = 13
       Caption = #21169#30913#30005#21387'(V)'
@@ -478,8 +471,8 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object Label27: TLabel
-      Left = 257
-      Top = 475
+      Left = 342
+      Top = 16
       Width = 73
       Height = 13
       Caption = #21169#30913#30005#27969'(A)'
@@ -491,7 +484,7 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object Label28: TLabel
-      Left = 101
+      Left = 12
       Top = 16
       Width = 99
       Height = 13
@@ -504,8 +497,8 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object SpeedButton5: TSpeedButton
-      Left = 7
-      Top = 2
+      Left = 37
+      Top = 460
       Width = 40
       Height = 40
       Caption = #37319#38598
@@ -1146,8 +1139,8 @@ object frmMain: TfrmMain
       end
     end
     object Panel26: TPanel
-      Left = 130
-      Top = 466
+      Left = 264
+      Top = 7
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1161,8 +1154,8 @@ object frmMain: TfrmMain
       TabOrder = 6
     end
     object Panel27: TPanel
-      Left = 334
-      Top = 466
+      Left = 417
+      Top = 7
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1176,7 +1169,7 @@ object frmMain: TfrmMain
       TabOrder = 7
     end
     object Panel28: TPanel
-      Left = 203
+      Left = 113
       Top = 7
       Width = 75
       Height = 30
@@ -1190,33 +1183,13 @@ object frmMain: TfrmMain
       ParentFont = False
       TabOrder = 8
     end
-    object BitBtn4: TBitBtn
-      Left = 376
-      Top = 2
-      Width = 60
-      Height = 40
-      Caption = #36127#36733#21152
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
+    object ProgressBar1: TProgressBar
+      Left = 104
+      Top = 472
+      Width = 377
+      Height = 17
+      Max = 10
       TabOrder = 9
-    end
-    object BitBtn5: TBitBtn
-      Left = 436
-      Top = 2
-      Width = 60
-      Height = 40
-      Caption = #36127#36733#20943
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 10
     end
   end
   object Panel29: TPanel
@@ -1244,20 +1217,6 @@ object frmMain: TfrmMain
       Kind = LkRedLight
       ParentShowHint = False
       ShowHint = True
-    end
-    object SpeedButton8: TSpeedButton
-      Left = 3
-      Top = 2
-      Width = 36
-      Height = 36
-      Caption = #25171#21360
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
-      OnClick = SpeedButton8Click
     end
     object cbCOMM: TComboBox
       Left = 69
@@ -1406,5 +1365,11 @@ object frmMain: TfrmMain
     Left = 313
     Top = 288
     ReportForm = {19000000}
+  end
+  object Timer1: TTimer
+    Enabled = False
+    OnTimer = Timer1Timer
+    Left = 390
+    Top = 504
   end
 end
