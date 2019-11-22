@@ -117,14 +117,12 @@ type
     Panel27: TPanel;
     Panel28: TPanel;
     DosMove1: TDosMove;
-    BitBtn2: TBitBtn;
     Panel29: TPanel;
     cbCOMM: TComboBox;
     Edit1: TSpinEdit;
     ComLed1: TComLed;
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
-    SpeedButton5: TSpeedButton;
     SpeedButton6: TSpeedButton;
     Panel33: TPanel;
     SpeedButton7: TSpeedButton;
@@ -134,6 +132,12 @@ type
     LabeledEdit19: TLabeledEdit;
     ProgressBar1: TProgressBar;
     Timer1: TTimer;
+    SpeedButton5: TSpeedButton;
+    Panel35: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label29: TLabel;
+    Label35: TLabel;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -155,7 +159,6 @@ type
     procedure SpeedButton5Click(Sender: TObject);
     procedure ADOQuery2AfterOpen(DataSet: TDataSet);
     procedure SpeedButton6Click(Sender: TObject);
-    procedure BitBtn2Click(Sender: TObject);
     procedure ComPort1AfterOpen(Sender: TObject);
     procedure ComPort1AfterClose(Sender: TObject);
     procedure ComPort1Error(Sender: TObject; Errors: TComErrors);
@@ -167,6 +170,8 @@ type
       var ParValue: Variant);
     procedure SpeedButton9Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
+    procedure DateTimePicker2Change(Sender: TObject);
   private
     { Private declarations }
     ifnewadd:boolean;
@@ -336,6 +341,7 @@ begin
     begin
       showmessage('设置CT变比成功!');
     end;
+    ifReadParam:=true;
   end;
 
   if ifSetU then
@@ -346,6 +352,7 @@ begin
     begin
       showmessage('设置额定电压成功!');
     end;
+    ifReadParam:=true;
   end;
 
   if ifSetHZ then
@@ -356,6 +363,7 @@ begin
     begin
       showmessage('设置额定频率成功!');
     end;
+    ifReadParam:=true;
   end;
 
   if ifSetActP then
@@ -366,6 +374,7 @@ begin
     begin
       showmessage('设置额定功率成功!');
     end;
+    ifReadParam:=true;
   end;
 
   WriteLog(pchar('本次结束'+FormatDateTime('hh:nn:ss zzz',Now())));
@@ -436,6 +445,7 @@ end;
 procedure TfrmMain.FormShow(Sender: TObject);
 var
   configini:tinifile;
+  fs:TFormatSettings;
 begin
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
@@ -452,7 +462,16 @@ begin
   except
   end;
 
-  updateAdoQuery1;  
+  fs.TimeSeparator:=':';
+  fs.ShortTimeFormat:='hh:nn:ss';
+  DateTimePicker1.Date:=now-7;
+  DateTimePicker1.Time:=strtotime('00:00:00',fs);
+  DateTimePicker2.Date:=now+7;
+  DateTimePicker2.Time:=strtotime('23:59:59',fs);
+
+  //showmessage(datetimetostr(DateTimePicker1.DateTime)+'   '+datetimetostr(DateTimePicker2.DateTime));
+
+  updateAdoQuery1;
 end;
 
 procedure TfrmMain.ComDataPacket1Packet(Sender: TObject;
@@ -598,7 +617,11 @@ begin
   adoquery1.SQL.Text:='select Unid as 测试号,Create_Time as 创建时间,BenchNo as 实验台号,PartNo as 物料号,OrderVolt as 订单电压,Model as 型号,SerialNo as 序列号,'+
                       'OrderP as 订单功率,ExcStatorO as 励磁定子电阻,MainStatorO as 主定子电阻,OrderHZ as 订单频率,Remark as 备注,'+
                       'HighPotTest as 高压测试,AVRModel as AVR型号,AVRNo as AVR编号,Tester as 测试者,TestDate as 测试日期,'+
-                      'Auditor as 审核者,Audit_Date as 审核时间 from Test_Master';
+                      'Auditor as 审核者,Audit_Date as 审核时间 from Test_Master '+
+                      ' where Create_Time between :Create_Time_Start and :Create_Time_Stop ';
+                      
+  adoquery1.Parameters.ParamByName('Create_Time_Start').Value:=DateTimePicker1.DateTime;
+  adoquery1.Parameters.ParamByName('Create_Time_Stop').Value:=DateTimePicker2.DateTime;
   adoquery1.Open;
 end;
 
@@ -789,11 +812,6 @@ begin
   frReport1.ShowReport;
 end;
 
-procedure TfrmMain.BitBtn2Click(Sender: TObject);
-begin
-  ifReadParam:=true;
-end;
-
 procedure TfrmMain.ComPort1AfterOpen(Sender: TObject);
 begin
   if Assigned(StatusBar1) then StatusBar1.Panels[0].Text:='串口'+ComPort1.Port+'打开成功';
@@ -827,6 +845,8 @@ var
   adotemp11:tadoquery;
   i:integer;  
 begin
+    if parname='SysTitle' then ParValue:=Panel29.Caption;
+
     if parname='BenchNo' then ParValue:=ADOQuery1.fieldbyname('实验台号').AsString;
     if parname='PartNo' then ParValue:=ADOQuery1.fieldbyname('物料号').AsString;
     if parname='OrderVolt' then ParValue:=ADOQuery1.fieldbyname('订单电压').AsString;
@@ -968,6 +988,16 @@ begin
     iProgressBar:=0;
     if (MessageDlg('是否保存此次采集结果？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
   end;
+end;
+
+procedure TfrmMain.DateTimePicker1Change(Sender: TObject);
+begin
+  updateAdoQuery1;
+end;
+
+procedure TfrmMain.DateTimePicker2Change(Sender: TObject);
+begin
+  updateAdoQuery1;
 end;
 
 end.

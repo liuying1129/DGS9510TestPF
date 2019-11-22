@@ -1,8 +1,8 @@
 object frmMain: TfrmMain
-  Left = 183
-  Top = 80
-  Width = 900
-  Height = 600
+  Left = 189
+  Top = 2
+  Width = 1024
+  Height = 680
   Caption = #26234#33021#27979#35797
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -21,8 +21,8 @@ object frmMain: TfrmMain
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 542
-    Width = 884
+    Top = 622
+    Width = 1008
     Height = 19
     Panels = <
       item
@@ -47,7 +47,7 @@ object frmMain: TfrmMain
     Left = 0
     Top = 40
     Width = 249
-    Height = 502
+    Height = 582
     Align = alLeft
     TabOrder = 1
     object SpeedButton1: TSpeedButton
@@ -68,7 +68,7 @@ object frmMain: TfrmMain
     end
     object SpeedButton6: TSpeedButton
       Left = 176
-      Top = 261
+      Top = 284
       Width = 70
       Height = 40
       Caption = #25171#21360
@@ -228,9 +228,9 @@ object frmMain: TfrmMain
     end
     object GroupBox7: TGroupBox
       Left = 1
-      Top = 321
+      Top = 428
       Width = 247
-      Height = 180
+      Height = 153
       Align = alBottom
       Caption = #21442#25968#35774#32622
       Font.Charset = ANSI_CHARSET
@@ -242,42 +242,42 @@ object frmMain: TfrmMain
       TabOrder = 15
       object Label31: TLabel
         Left = 186
-        Top = 116
+        Top = 123
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
       object Label30: TLabel
         Left = 186
-        Top = 91
+        Top = 98
         Width = 52
         Height = 13
         Caption = #21151#29575#22240#25968
       end
       object Label32: TLabel
         Left = 186
-        Top = 67
+        Top = 74
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
       object Label33: TLabel
         Left = 186
-        Top = 43
+        Top = 50
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
       object Label34: TLabel
         Left = 186
-        Top = 19
+        Top = 26
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
       object BitBtn1: TBitBtn
         Left = 147
-        Top = 112
+        Top = 119
         Width = 35
         Height = 21
         Caption = #35774#32622
@@ -286,7 +286,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit1: TLabeledEdit
         Left = 86
-        Top = 16
+        Top = 23
         Width = 60
         Height = 21
         EditLabel.Width = 73
@@ -297,7 +297,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit2: TLabeledEdit
         Left = 86
-        Top = 40
+        Top = 47
         Width = 60
         Height = 21
         EditLabel.Width = 80
@@ -308,7 +308,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit3: TLabeledEdit
         Left = 86
-        Top = 64
+        Top = 71
         Width = 60
         Height = 21
         EditLabel.Width = 80
@@ -319,7 +319,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit4: TLabeledEdit
         Left = 86
-        Top = 88
+        Top = 95
         Width = 60
         Height = 21
         EditLabel.Width = 52
@@ -330,7 +330,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit5: TLabeledEdit
         Left = 86
-        Top = 112
+        Top = 119
         Width = 60
         Height = 21
         EditLabel.Width = 68
@@ -341,7 +341,7 @@ object frmMain: TfrmMain
       end
       object BitBtn10: TBitBtn
         Left = 147
-        Top = 88
+        Top = 95
         Width = 35
         Height = 21
         Caption = #35774#32622
@@ -349,7 +349,7 @@ object frmMain: TfrmMain
       end
       object BitBtn11: TBitBtn
         Left = 147
-        Top = 64
+        Top = 71
         Width = 35
         Height = 21
         Caption = #35774#32622
@@ -358,7 +358,7 @@ object frmMain: TfrmMain
       end
       object BitBtn12: TBitBtn
         Left = 147
-        Top = 40
+        Top = 47
         Width = 35
         Height = 21
         Caption = #35774#32622
@@ -367,21 +367,12 @@ object frmMain: TfrmMain
       end
       object BitBtn13: TBitBtn
         Left = 147
-        Top = 16
+        Top = 23
         Width = 35
         Height = 21
         Caption = #35774#32622
         TabOrder = 9
         OnClick = BitBtn13Click
-      end
-      object BitBtn2: TBitBtn
-        Left = 8
-        Top = 135
-        Width = 230
-        Height = 40
-        Caption = #35835#21462#21442#25968
-        TabOrder = 10
-        OnClick = BitBtn2Click
       end
     end
     object LabeledEdit19: TLabeledEdit
@@ -399,15 +390,15 @@ object frmMain: TfrmMain
   object Panel32: TPanel
     Left = 249
     Top = 40
-    Width = 135
-    Height = 502
+    Width = 209
+    Height = 582
     Align = alClient
     TabOrder = 2
     object DBGrid1: TDBGrid
       Left = 1
-      Top = 1
-      Width = 133
-      Height = 285
+      Top = 54
+      Width = 207
+      Height = 312
       Align = alClient
       DataSource = DataSource1
       ReadOnly = True
@@ -420,8 +411,8 @@ object frmMain: TfrmMain
     end
     object DBGrid2: TDBGrid
       Left = 1
-      Top = 286
-      Width = 133
+      Top = 366
+      Width = 207
       Height = 170
       Align = alBottom
       DataSource = DataSource2
@@ -435,8 +426,8 @@ object frmMain: TfrmMain
     end
     object Panel34: TPanel
       Left = 1
-      Top = 456
-      Width = 133
+      Top = 536
+      Width = 207
       Height = 45
       Align = alBottom
       TabOrder = 2
@@ -448,18 +439,68 @@ object frmMain: TfrmMain
         Caption = #21024#38500
         OnClick = SpeedButton9Click
       end
+      object SpeedButton5: TSpeedButton
+        Left = 103
+        Top = 3
+        Width = 40
+        Height = 40
+        Caption = #37319#38598
+        OnClick = SpeedButton5Click
+      end
+    end
+    object Panel35: TPanel
+      Left = 1
+      Top = 1
+      Width = 207
+      Height = 53
+      Align = alTop
+      TabOrder = 3
+      object Label29: TLabel
+        Left = 5
+        Top = 8
+        Width = 52
+        Height = 13
+        Caption = #24320#22987#26085#26399
+      end
+      object Label35: TLabel
+        Left = 5
+        Top = 31
+        Width = 52
+        Height = 13
+        Caption = #32467#26463#26085#26399
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 60
+        Top = 4
+        Width = 100
+        Height = 21
+        Date = 43791.974172581020000000
+        Time = 43791.974172581020000000
+        TabOrder = 0
+        OnChange = DateTimePicker1Change
+      end
+      object DateTimePicker2: TDateTimePicker
+        Left = 60
+        Top = 28
+        Width = 100
+        Height = 21
+        Date = 43791.974172581020000000
+        Time = 43791.974172581020000000
+        TabOrder = 1
+        OnChange = DateTimePicker2Change
+      end
     end
   end
   object Panel31: TPanel
-    Left = 384
+    Left = 458
     Top = 40
-    Width = 500
-    Height = 502
+    Width = 550
+    Height = 582
     Align = alRight
     TabOrder = 3
     object Label26: TLabel
-      Left = 189
-      Top = 16
+      Left = 260
+      Top = 33
       Width = 73
       Height = 13
       Caption = #21169#30913#30005#21387'(V)'
@@ -471,8 +512,8 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object Label27: TLabel
-      Left = 342
-      Top = 16
+      Left = 455
+      Top = 33
       Width = 73
       Height = 13
       Caption = #21169#30913#30005#27969'(A)'
@@ -484,8 +525,8 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object Label28: TLabel
-      Left = 12
-      Top = 16
+      Left = 30
+      Top = 33
       Width = 99
       Height = 13
       Caption = #24403#21069#27979#35797#36127#33655'(%)'
@@ -496,18 +537,10 @@ object frmMain: TfrmMain
       Font.Style = []
       ParentFont = False
     end
-    object SpeedButton5: TSpeedButton
-      Left = 37
-      Top = 460
-      Width = 40
-      Height = 40
-      Caption = #37319#38598
-      OnClick = SpeedButton5Click
-    end
     object GroupBox1: TGroupBox
-      Left = 7
-      Top = 45
-      Width = 490
+      Left = 10
+      Top = 86
+      Width = 530
       Height = 75
       Caption = #36755#20986#30005#21387'(V)'
       Font.Charset = ANSI_CHARSET
@@ -518,49 +551,49 @@ object frmMain: TfrmMain
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
-        Left = 37
+        Left = 61
         Top = 17
         Width = 14
         Height = 13
         Caption = 'UV'
       end
       object Label2: TLabel
-        Left = 116
+        Left = 142
         Top = 17
         Width = 14
         Height = 13
         Caption = 'VW'
       end
       object Label3: TLabel
-        Left = 197
+        Left = 225
         Top = 17
         Width = 14
         Height = 13
         Caption = 'WU'
       end
       object Label4: TLabel
-        Left = 280
+        Left = 310
         Top = 17
         Width = 7
         Height = 13
         Caption = 'U'
       end
       object Label5: TLabel
-        Left = 359
+        Left = 393
         Top = 17
         Width = 7
         Height = 13
         Caption = 'V'
       end
       object Label6: TLabel
-        Left = 441
+        Left = 477
         Top = 17
         Width = 7
         Height = 13
         Caption = 'W'
       end
       object Panel1: TPanel
-        Left = 7
+        Left = 30
         Top = 32
         Width = 75
         Height = 30
@@ -575,7 +608,7 @@ object frmMain: TfrmMain
         TabOrder = 0
       end
       object Panel2: TPanel
-        Left = 87
+        Left = 112
         Top = 32
         Width = 75
         Height = 30
@@ -590,7 +623,7 @@ object frmMain: TfrmMain
         TabOrder = 1
       end
       object Panel3: TPanel
-        Left = 167
+        Left = 195
         Top = 32
         Width = 75
         Height = 30
@@ -605,7 +638,7 @@ object frmMain: TfrmMain
         TabOrder = 2
       end
       object Panel4: TPanel
-        Left = 247
+        Left = 277
         Top = 32
         Width = 75
         Height = 30
@@ -620,7 +653,7 @@ object frmMain: TfrmMain
         TabOrder = 3
       end
       object Panel5: TPanel
-        Left = 327
+        Left = 360
         Top = 32
         Width = 75
         Height = 30
@@ -635,7 +668,7 @@ object frmMain: TfrmMain
         TabOrder = 4
       end
       object Panel6: TPanel
-        Left = 407
+        Left = 443
         Top = 32
         Width = 75
         Height = 30
@@ -651,9 +684,9 @@ object frmMain: TfrmMain
       end
     end
     object GroupBox2: TGroupBox
-      Left = 7
-      Top = 126
-      Width = 490
+      Left = 10
+      Top = 167
+      Width = 530
       Height = 60
       Caption = #36755#20986#30005#27969'(A)'
       Font.Charset = ANSI_CHARSET
@@ -671,14 +704,14 @@ object frmMain: TfrmMain
         Caption = 'U'
       end
       object Label11: TLabel
-        Left = 197
+        Left = 233
         Top = 28
         Width = 7
         Height = 13
         Caption = 'V'
       end
       object Label12: TLabel
-        Left = 391
+        Left = 429
         Top = 28
         Width = 7
         Height = 13
@@ -700,7 +733,7 @@ object frmMain: TfrmMain
         TabOrder = 0
       end
       object Panel11: TPanel
-        Left = 213
+        Left = 249
         Top = 19
         Width = 75
         Height = 30
@@ -715,7 +748,7 @@ object frmMain: TfrmMain
         TabOrder = 1
       end
       object Panel12: TPanel
-        Left = 407
+        Left = 443
         Top = 19
         Width = 75
         Height = 30
@@ -731,9 +764,9 @@ object frmMain: TfrmMain
       end
     end
     object GroupBox3: TGroupBox
-      Left = 7
-      Top = 192
-      Width = 490
+      Left = 10
+      Top = 233
+      Width = 530
       Height = 60
       Caption = #26377#21151#29575'(KW)'
       Font.Charset = ANSI_CHARSET
@@ -765,7 +798,7 @@ object frmMain: TfrmMain
         Caption = 'W'
       end
       object Label13: TLabel
-        Left = 354
+        Left = 386
         Top = 27
         Width = 52
         Height = 13
@@ -817,7 +850,7 @@ object frmMain: TfrmMain
         TabOrder = 2
       end
       object Panel13: TPanel
-        Left = 408
+        Left = 443
         Top = 18
         Width = 75
         Height = 30
@@ -833,9 +866,9 @@ object frmMain: TfrmMain
       end
     end
     object GroupBox4: TGroupBox
-      Left = 7
-      Top = 260
-      Width = 490
+      Left = 10
+      Top = 301
+      Width = 530
       Height = 60
       Caption = #26080#21151#29575'(Kvar)'
       Font.Charset = ANSI_CHARSET
@@ -867,7 +900,7 @@ object frmMain: TfrmMain
         Caption = 'W'
       end
       object Label17: TLabel
-        Left = 353
+        Left = 386
         Top = 26
         Width = 52
         Height = 13
@@ -919,7 +952,7 @@ object frmMain: TfrmMain
         TabOrder = 2
       end
       object Panel17: TPanel
-        Left = 407
+        Left = 443
         Top = 17
         Width = 75
         Height = 30
@@ -935,9 +968,9 @@ object frmMain: TfrmMain
       end
     end
     object GroupBox5: TGroupBox
-      Left = 7
-      Top = 328
-      Width = 490
+      Left = 10
+      Top = 369
+      Width = 530
       Height = 60
       Caption = #21151#29575#22240#25968
       Font.Charset = ANSI_CHARSET
@@ -969,7 +1002,7 @@ object frmMain: TfrmMain
         Caption = 'W'
       end
       object Label21: TLabel
-        Left = 325
+        Left = 359
         Top = 27
         Width = 78
         Height = 13
@@ -1021,7 +1054,7 @@ object frmMain: TfrmMain
         TabOrder = 2
       end
       object Panel21: TPanel
-        Left = 406
+        Left = 443
         Top = 18
         Width = 75
         Height = 30
@@ -1037,9 +1070,9 @@ object frmMain: TfrmMain
       end
     end
     object GroupBox6: TGroupBox
-      Left = 7
-      Top = 398
-      Width = 490
+      Left = 10
+      Top = 439
+      Width = 530
       Height = 60
       Caption = #30456#24207
       Font.Charset = ANSI_CHARSET
@@ -1071,7 +1104,7 @@ object frmMain: TfrmMain
         Caption = 'W'
       end
       object Label25: TLabel
-        Left = 349
+        Left = 381
         Top = 26
         Width = 54
         Height = 13
@@ -1123,7 +1156,7 @@ object frmMain: TfrmMain
         TabOrder = 2
       end
       object Panel25: TPanel
-        Left = 405
+        Left = 443
         Top = 17
         Width = 75
         Height = 30
@@ -1139,8 +1172,8 @@ object frmMain: TfrmMain
       end
     end
     object Panel26: TPanel
-      Left = 264
-      Top = 7
+      Left = 259
+      Top = 48
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1154,8 +1187,8 @@ object frmMain: TfrmMain
       TabOrder = 6
     end
     object Panel27: TPanel
-      Left = 417
-      Top = 7
+      Left = 454
+      Top = 48
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1169,8 +1202,8 @@ object frmMain: TfrmMain
       TabOrder = 7
     end
     object Panel28: TPanel
-      Left = 113
-      Top = 7
+      Left = 41
+      Top = 48
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1184,9 +1217,9 @@ object frmMain: TfrmMain
       TabOrder = 8
     end
     object ProgressBar1: TProgressBar
-      Left = 104
-      Top = 472
-      Width = 377
+      Left = 10
+      Top = 8
+      Width = 529
       Height = 17
       Max = 10
       TabOrder = 9
@@ -1195,7 +1228,7 @@ object frmMain: TfrmMain
   object Panel29: TPanel
     Left = 0
     Top = 0
-    Width = 884
+    Width = 1008
     Height = 40
     Align = alTop
     Caption = #21457#30005#26426#26234#33021#27979#35797#31995#32479
@@ -1207,7 +1240,7 @@ object frmMain: TfrmMain
     ParentFont = False
     TabOrder = 4
     object ComLed1: TComLed
-      Left = 193
+      Left = 136
       Top = 9
       Width = 25
       Height = 25
@@ -1219,7 +1252,7 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object cbCOMM: TComboBox
-      Left = 69
+      Left = 12
       Top = 11
       Width = 65
       Height = 21
@@ -1245,7 +1278,7 @@ object frmMain: TfrmMain
         'COM4')
     end
     object Edit1: TSpinEdit
-      Left = 143
+      Left = 86
       Top = 10
       Width = 40
       Height = 22
@@ -1265,7 +1298,7 @@ object frmMain: TfrmMain
       Value = 1
     end
     object Panel33: TPanel
-      Left = 698
+      Left = 822
       Top = 1
       Width = 185
       Height = 38
