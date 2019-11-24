@@ -49,6 +49,7 @@ object frmMain: TfrmMain
     Width = 249
     Height = 582
     Align = alLeft
+    Color = 16767438
     TabOrder = 1
     object SpeedButton1: TSpeedButton
       Left = 176
@@ -68,7 +69,7 @@ object frmMain: TfrmMain
     end
     object SpeedButton6: TSpeedButton
       Left = 176
-      Top = 284
+      Top = 285
       Width = 70
       Height = 40
       Caption = #25171#21360
@@ -400,6 +401,7 @@ object frmMain: TfrmMain
       Width = 207
       Height = 312
       Align = alClient
+      Color = 16767438
       DataSource = DataSource1
       ReadOnly = True
       TabOrder = 0
@@ -415,6 +417,7 @@ object frmMain: TfrmMain
       Width = 207
       Height = 170
       Align = alBottom
+      Color = 16767438
       DataSource = DataSource2
       ReadOnly = True
       TabOrder = 1
@@ -430,6 +433,7 @@ object frmMain: TfrmMain
       Width = 207
       Height = 45
       Align = alBottom
+      Color = 16767438
       TabOrder = 2
       object SpeedButton9: TSpeedButton
         Left = 10
@@ -439,14 +443,6 @@ object frmMain: TfrmMain
         Caption = #21024#38500
         OnClick = SpeedButton9Click
       end
-      object SpeedButton5: TSpeedButton
-        Left = 103
-        Top = 3
-        Width = 40
-        Height = 40
-        Caption = #37319#38598
-        OnClick = SpeedButton5Click
-      end
     end
     object Panel35: TPanel
       Left = 1
@@ -454,6 +450,7 @@ object frmMain: TfrmMain
       Width = 207
       Height = 53
       Align = alTop
+      Color = 16767438
       TabOrder = 3
       object Label29: TLabel
         Left = 5
@@ -497,10 +494,11 @@ object frmMain: TfrmMain
     Width = 550
     Height = 582
     Align = alRight
+    Color = 16767438
     TabOrder = 3
     object Label26: TLabel
       Left = 260
-      Top = 33
+      Top = 8
       Width = 73
       Height = 13
       Caption = #21169#30913#30005#21387'(V)'
@@ -513,7 +511,7 @@ object frmMain: TfrmMain
     end
     object Label27: TLabel
       Left = 455
-      Top = 33
+      Top = 8
       Width = 73
       Height = 13
       Caption = #21169#30913#30005#27969'(A)'
@@ -526,7 +524,7 @@ object frmMain: TfrmMain
     end
     object Label28: TLabel
       Left = 30
-      Top = 33
+      Top = 8
       Width = 99
       Height = 13
       Caption = #24403#21069#27979#35797#36127#33655'(%)'
@@ -537,9 +535,41 @@ object frmMain: TfrmMain
       Font.Style = []
       ParentFont = False
     end
+    object SpeedButton10: TSpeedButton
+      Left = 360
+      Top = 483
+      Width = 60
+      Height = 40
+      Caption = #36127#36733'+'
+      OnClick = SpeedButton10Click
+    end
+    object SpeedButton11: TSpeedButton
+      Left = 421
+      Top = 483
+      Width = 60
+      Height = 40
+      Caption = #36127#36733'-'
+      OnClick = SpeedButton11Click
+    end
+    object SpeedButton12: TSpeedButton
+      Left = 360
+      Top = 531
+      Width = 60
+      Height = 40
+      Caption = #33258#23450#20041'1'
+      OnClick = SpeedButton12Click
+    end
+    object SpeedButton13: TSpeedButton
+      Left = 421
+      Top = 531
+      Width = 60
+      Height = 40
+      Caption = #33258#23450#20041'2'
+      OnClick = SpeedButton13Click
+    end
     object GroupBox1: TGroupBox
       Left = 10
-      Top = 86
+      Top = 61
       Width = 530
       Height = 75
       Caption = #36755#20986#30005#21387'(V)'
@@ -685,7 +715,7 @@ object frmMain: TfrmMain
     end
     object GroupBox2: TGroupBox
       Left = 10
-      Top = 167
+      Top = 142
       Width = 530
       Height = 60
       Caption = #36755#20986#30005#27969'(A)'
@@ -765,7 +795,7 @@ object frmMain: TfrmMain
     end
     object GroupBox3: TGroupBox
       Left = 10
-      Top = 233
+      Top = 208
       Width = 530
       Height = 60
       Caption = #26377#21151#29575'(KW)'
@@ -867,7 +897,7 @@ object frmMain: TfrmMain
     end
     object GroupBox4: TGroupBox
       Left = 10
-      Top = 301
+      Top = 276
       Width = 530
       Height = 60
       Caption = #26080#21151#29575'(Kvar)'
@@ -969,7 +999,7 @@ object frmMain: TfrmMain
     end
     object GroupBox5: TGroupBox
       Left = 10
-      Top = 369
+      Top = 344
       Width = 530
       Height = 60
       Caption = #21151#29575#22240#25968
@@ -1071,7 +1101,7 @@ object frmMain: TfrmMain
     end
     object GroupBox6: TGroupBox
       Left = 10
-      Top = 439
+      Top = 414
       Width = 530
       Height = 60
       Caption = #30456#24207
@@ -1173,7 +1203,7 @@ object frmMain: TfrmMain
     end
     object Panel26: TPanel
       Left = 259
-      Top = 48
+      Top = 23
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1188,7 +1218,7 @@ object frmMain: TfrmMain
     end
     object Panel27: TPanel
       Left = 454
-      Top = 48
+      Top = 23
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1203,7 +1233,7 @@ object frmMain: TfrmMain
     end
     object Panel28: TPanel
       Left = 41
-      Top = 48
+      Top = 23
       Width = 75
       Height = 30
       Caption = '0.00'
@@ -1216,13 +1246,56 @@ object frmMain: TfrmMain
       ParentFont = False
       TabOrder = 8
     end
-    object ProgressBar1: TProgressBar
+    object GroupBox8: TGroupBox
       Left = 10
-      Top = 8
-      Width = 529
-      Height = 17
-      Max = 10
+      Top = 480
+      Width = 280
+      Height = 91
+      Caption = #37319#38598
       TabOrder = 9
+      object SpeedButton5: TSpeedButton
+        Left = 15
+        Top = 19
+        Width = 40
+        Height = 40
+        Caption = #31354#36733
+        OnClick = SpeedButton5Click
+      end
+      object SpeedButton3: TSpeedButton
+        Tag = 1
+        Left = 55
+        Top = 19
+        Width = 70
+        Height = 40
+        Caption = #24102#36733'PF0.8'
+        OnClick = SpeedButton5Click
+      end
+      object SpeedButton4: TSpeedButton
+        Tag = 2
+        Left = 125
+        Top = 19
+        Width = 70
+        Height = 40
+        Caption = #24102#36733'PF1.0'
+        OnClick = SpeedButton5Click
+      end
+      object SpeedButton8: TSpeedButton
+        Tag = 3
+        Left = 195
+        Top = 19
+        Width = 60
+        Height = 40
+        Caption = #21097#30913#30005#21387
+        OnClick = SpeedButton5Click
+      end
+      object ProgressBar1: TProgressBar
+        Left = 5
+        Top = 66
+        Width = 268
+        Height = 17
+        Max = 10
+        TabOrder = 0
+      end
     end
   end
   object Panel29: TPanel
@@ -1232,6 +1305,7 @@ object frmMain: TfrmMain
     Height = 40
     Align = alTop
     Caption = #21457#30005#26426#26234#33021#27979#35797#31995#32479
+    Color = 16767438
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
     Font.Height = -27
@@ -1304,6 +1378,7 @@ object frmMain: TfrmMain
       Height = 38
       Align = alRight
       BevelOuter = bvNone
+      Color = 16767438
       TabOrder = 2
       object SpeedButton7: TSpeedButton
         Left = 148

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls, Spin,
   CPortCtl, ToolWin, inifiles, CPort,StrUtils, DB, ADODB, ActnList, DosMove,
-  FR_Class;
+  FR_Class,Math{RoundTo};
 
 type
   TfrmMain = class(TForm)
@@ -130,14 +130,22 @@ type
     Panel34: TPanel;
     SpeedButton9: TSpeedButton;
     LabeledEdit19: TLabeledEdit;
-    ProgressBar1: TProgressBar;
     Timer1: TTimer;
-    SpeedButton5: TSpeedButton;
     Panel35: TPanel;
     DateTimePicker1: TDateTimePicker;
     DateTimePicker2: TDateTimePicker;
     Label29: TLabel;
     Label35: TLabel;
+    GroupBox8: TGroupBox;
+    SpeedButton5: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    ProgressBar1: TProgressBar;
+    SpeedButton10: TSpeedButton;
+    SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    SpeedButton13: TSpeedButton;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -172,6 +180,10 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure DateTimePicker1Change(Sender: TObject);
     procedure DateTimePicker2Change(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+    procedure SpeedButton11Click(Sender: TObject);
+    procedure SpeedButton12Click(Sender: TObject);
+    procedure SpeedButton13Click(Sender: TObject);
   private
     { Private declarations }
     ifnewadd:boolean;
@@ -196,12 +208,18 @@ var
   ifSetU:boolean;
   ifSetActP:boolean;
 
+  ifLoadAdd:boolean;
+  ifLoadReduce:boolean;
+
+  bSelfDef1:boolean;
+  bSelfDef2:boolean;
+
   W_CT_Rate:integer;//CT变比
   W_U_Specified:integer;//额定电压
   F_HZ_Specified:Double;//额定频率
   W_ActP_Specified:integer;//额定功率
 
-  iProgressBar:integer;
+  //iProgressBar:integer;
 
 {$R *.dfm}
 
@@ -233,16 +251,17 @@ begin
   Panel20.Caption:=floattostr(RrcDGS9510.PF_W);
   Panel21.Caption:=floattostr(RrcDGS9510.PF_Avg);
 
-  Panel22.Caption:=inttostr(RrcDGS9510.PS_U);
-  Panel23.Caption:=inttostr(RrcDGS9510.PS_V);
-  Panel24.Caption:=inttostr(RrcDGS9510.PS_W);
+  Panel22.Caption:=floattostr(RrcDGS9510.PS_U);
+  Panel23.Caption:=floattostr(RrcDGS9510.PS_V);
+  Panel24.Caption:=floattostr(RrcDGS9510.PS_W);
   Panel25.Caption:=floattostr(RrcDGS9510.PS_HZ);
 
-  Panel26.Caption:=inttostr(RrcDGS9510.Exc_V);
-  Panel27.Caption:=inttostr(RrcDGS9510.Exc_A);
+  Panel26.Caption:=floattostr(RrcDGS9510.Exc_V);
+  Panel27.Caption:=floattostr(RrcDGS9510.Exc_A);
 
   if RrcDGS9510.ActP_Specified<>0 then
-    Panel28.Caption:=format('%.1f',[RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100]);
+    //Panel28.Caption:=format('%.1f',[RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100]);
+    Panel28.Caption:=floattostr(RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100);
 
   Label31.Caption:=inttostr(RrcDGS9510.CT_Rate);
   Label33.Caption:=floattostr(RrcDGS9510.HZ_Specified);
@@ -280,10 +299,10 @@ begin
     RrcDGS9510.OutU_V:=Decode2Byte(copy(RFM,12,2));
     RrcDGS9510.OutU_W:=Decode2Byte(copy(RFM,14,2));
 
-    RrcDGS9510.PS_U:=Decode2Byte(copy(RFM,16,2));
-    RrcDGS9510.PS_V:=Decode2Byte(copy(RFM,18,2));
-    RrcDGS9510.PS_W:=Decode2Byte(copy(RFM,20,2));
-    RrcDGS9510.PS_HZ:=Decode2Byte(copy(RFM,22,2));
+    RrcDGS9510.PS_U:=Decode2Byte(copy(RFM,16,2))/10;
+    RrcDGS9510.PS_V:=Decode2Byte(copy(RFM,18,2))/10;
+    RrcDGS9510.PS_W:=Decode2Byte(copy(RFM,20,2))/10;
+    RrcDGS9510.PS_HZ:=Decode2Byte(copy(RFM,22,2))/100;
 
     RrcDGS9510.OutA_U:=Decode2Byte(copy(RFM,44,2));
     RrcDGS9510.OutA_V:=Decode2Byte(copy(RFM,46,2));
@@ -299,13 +318,13 @@ begin
     RrcDGS9510.ReactP_W:=Decode4Byte(copy(RFM,84,4));
     RrcDGS9510.ReactP_Total:=Decode4Byte(copy(RFM,88,4));
 
-    RrcDGS9510.PF_U:=Decode2Byte(copy(RFM,108,2));
-    RrcDGS9510.PF_V:=Decode2Byte(copy(RFM,110,2));
-    RrcDGS9510.PF_W:=Decode2Byte(copy(RFM,112,2));
-    RrcDGS9510.PF_Avg:=Decode2Byte(copy(RFM,114,2));
+    RrcDGS9510.PF_U:=Decode2Byte(copy(RFM,108,2))/100;
+    RrcDGS9510.PF_V:=Decode2Byte(copy(RFM,110,2))/100;
+    RrcDGS9510.PF_W:=Decode2Byte(copy(RFM,112,2))/100;
+    RrcDGS9510.PF_Avg:=Decode2Byte(copy(RFM,114,2))/100;
 
-    RrcDGS9510.Exc_V:=Decode2Byte(copy(RFM,164,2));
-    RrcDGS9510.Exc_A:=Decode2Byte(copy(RFM,168,2));
+    RrcDGS9510.Exc_V:=Decode2Byte(copy(RFM,138,2))/10;//该地址为电池电压,用作励磁电压
+    RrcDGS9510.Exc_A:=Decode2Byte(copy(RFM,140,2))/10;//该地址为充电机电压,用作励磁电流
   end;
 
   if ifReadParam then//读取参数
@@ -375,6 +394,30 @@ begin
       showmessage('设置额定功率成功!');
     end;
     ifReadParam:=true;
+  end;
+
+  if ifLoadAdd then//负载加
+  begin
+    ifLoadAdd:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$19#$ff#0);
+  end;
+
+  if ifLoadReduce then//负载减
+  begin
+    ifLoadReduce:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$20#$ff#0);
+  end;
+
+  if bSelfDef1 then//自定义输出1
+  begin
+    bSelfDef1:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$21#$ff#0);
+  end;
+
+  if bSelfDef2 then//自定义输出2
+  begin
+    bSelfDef2:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$22#$ff#0);
   end;
 
   WriteLog(pchar('本次结束'+FormatDateTime('hh:nn:ss zzz',Now())));
@@ -452,6 +495,8 @@ begin
   cbCOMM.Text:=ConfigIni.ReadString('Interface','COM','COM1');
   edit1.Value:=configini.ReadInteger('Interface','ControllerAddr',1);
   Panel29.Caption:=configini.ReadString('Interface','SysTitle','发电机智能测试系统');
+  SpeedButton12.Caption:=configini.ReadString('Interface','SelfDefBtnCaption1','自定义1');
+  SpeedButton13.Caption:=configini.ReadString('Interface','SelfDefBtnCaption2','自定义2');
 
   configini.Free;
   
@@ -634,7 +679,13 @@ begin
   ifSetU:=false;
   ifSetActP:=false;
 
-  iProgressBar:=0;
+  ifLoadAdd:=false;
+  ifLoadReduce:=false;
+  
+  bSelfDef1:=false;
+  bSelfDef2:=false;
+
+  //iProgressBar:=0;
 
   ADOQuery1.Connection:=dm.ADOConnection1;
   ADOQuery2.Connection:=dm.ADOConnection1;
@@ -715,51 +766,95 @@ begin
 end;
 
 procedure TfrmMain.SpeedButton5Click(Sender: TObject);
+const
+  WaitTime=10;//等待10秒
 var
   adotemp11,adotemp22:tadoquery;
   sqlstr:string;
   Insert_Identity:integer;
-begin
-  Timer1.Enabled:=true;
+  
+  currenttime:longword;
+  i:integer;
 
+  Save_Cursor:TCursor;
+begin
+  if not ADOQuery1.Active then exit;
+  if ADOQuery1.RecordCount<=0 then exit;
+  //Timer1.Enabled:=true;
+
+  ProgressBar1.Max:=WaitTime;
+
+  (Sender as TSpeedButton).Enabled:=false;
+  Save_Cursor := Screen.Cursor;
+  Screen.Cursor := crHourGlass;    { Show hourglass cursor }
+
+  for i := 1 to WaitTime do
+  begin
+  
+    //等待1秒
+    currenttime:=gettickcount() div 1000;
+    while (gettickcount() div 1000)<(currenttime+1) do
+    begin
+      application.ProcessMessages;
+    end;
+
+    ProgressBar1.Position:=i;
+  end;
+
+  if (MessageDlg('是否保存此次采集结果？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then
+  begin
+    Screen.Cursor := Save_Cursor;
+    (Sender as TSpeedButton).Enabled:=true;
+    exit;
+  end;
+
+  ProgressBar1.Position:=0;
+    
   adotemp11:=tadoquery.Create(nil);
   adotemp11.Connection:=DM.ADOConnection1;
 
-    sqlstr:='Insert into Test_Slave ('+
-                        ' PkUnid, OutU_UV, OutU_VW, OutU_WU, OutA_U, OutA_V, OutA_W, ActP_Total, ReactP_Total, PF_Avg, Exc_V, Exc_A, PS_HZ, Operator, ActP_Specified) values ('+
-                        ':PkUnid,:OutU_UV,:OutU_VW,:OutU_WU,:OutA_U,:OutA_V,:OutA_W,:ActP_Total,:ReactP_Total,:PF_Avg,:Exc_V,:Exc_A,:PS_HZ,:Operator,:ActP_Specified); ';
-    adotemp11.Close;
-    adotemp11.SQL.Clear;
-    adotemp11.SQL.Add(sqlstr);
-    adotemp11.Parameters.ParamByName('PkUnid').Value:=self.ADOQuery1.fieldbyname('测试号').AsInteger;
-    adotemp11.Parameters.ParamByName('OutU_UV').Value:=RrcDGS9510.OutU_UV;
-    adotemp11.Parameters.ParamByName('OutU_VW').Value:=RrcDGS9510.OutU_VW;
-    adotemp11.Parameters.ParamByName('OutU_WU').Value:=RrcDGS9510.OutU_WU;
-    adotemp11.Parameters.ParamByName('OutA_U').Value:=RrcDGS9510.OutA_U;
-    adotemp11.Parameters.ParamByName('OutA_V').Value:=RrcDGS9510.OutA_V;
-    adotemp11.Parameters.ParamByName('OutA_W').Value:=RrcDGS9510.OutA_W;
-    adotemp11.Parameters.ParamByName('ActP_Total').Value:=RrcDGS9510.ActP_Total;
-    adotemp11.Parameters.ParamByName('ReactP_Total').Value:=RrcDGS9510.ReactP_Total;
-    adotemp11.Parameters.ParamByName('PF_Avg').Value:=RrcDGS9510.PF_Avg;
-    adotemp11.Parameters.ParamByName('Exc_V').Value:=RrcDGS9510.Exc_V;
-    adotemp11.Parameters.ParamByName('Exc_A').Value:=RrcDGS9510.Exc_A;
-    adotemp11.Parameters.ParamByName('PS_HZ').Value:=RrcDGS9510.PS_HZ;
-    adotemp11.Parameters.ParamByName('Operator').Value:=null;
-    adotemp11.Parameters.ParamByName('ActP_Specified').Value:=RrcDGS9510.ActP_Specified;
-    adotemp11.ExecSQL;
-    ADOQuery2.Requery([]);
+  sqlstr:='Insert into Test_Slave ('+
+                      ' PkUnid, OutU_UV, OutU_VW, OutU_WU, OutA_U, OutA_V, OutA_W, ActP_Total, ReactP_Total, PF_Avg, Exc_V, Exc_A, PS_HZ, Operator, ActP_Specified, Collect_Type, PS_U, PS_V, PS_W) values ('+
+                      ':PkUnid,:OutU_UV,:OutU_VW,:OutU_WU,:OutA_U,:OutA_V,:OutA_W,:ActP_Total,:ReactP_Total,:PF_Avg,:Exc_V,:Exc_A,:PS_HZ,:Operator,:ActP_Specified,:Collect_Type,:PS_U,:PS_V,:PS_W); ';
+  adotemp11.Close;
+  adotemp11.SQL.Clear;
+  adotemp11.SQL.Add(sqlstr);
+  adotemp11.Parameters.ParamByName('PkUnid').Value:=self.ADOQuery1.fieldbyname('测试号').AsInteger;
+  adotemp11.Parameters.ParamByName('OutU_UV').Value:=RrcDGS9510.OutU_UV;
+  adotemp11.Parameters.ParamByName('OutU_VW').Value:=RrcDGS9510.OutU_VW;
+  adotemp11.Parameters.ParamByName('OutU_WU').Value:=RrcDGS9510.OutU_WU;
+  adotemp11.Parameters.ParamByName('OutA_U').Value:=RrcDGS9510.OutA_U;
+  adotemp11.Parameters.ParamByName('OutA_V').Value:=RrcDGS9510.OutA_V;
+  adotemp11.Parameters.ParamByName('OutA_W').Value:=RrcDGS9510.OutA_W;
+  adotemp11.Parameters.ParamByName('ActP_Total').Value:=RrcDGS9510.ActP_Total;
+  adotemp11.Parameters.ParamByName('ReactP_Total').Value:=RrcDGS9510.ReactP_Total;
+  adotemp11.Parameters.ParamByName('PF_Avg').Value:=RrcDGS9510.PF_Avg;
+  adotemp11.Parameters.ParamByName('Exc_V').Value:=RrcDGS9510.Exc_V;
+  adotemp11.Parameters.ParamByName('Exc_A').Value:=RrcDGS9510.Exc_A;
+  adotemp11.Parameters.ParamByName('PS_HZ').Value:=RrcDGS9510.PS_HZ;
+  adotemp11.Parameters.ParamByName('Operator').Value:=null;
+  adotemp11.Parameters.ParamByName('ActP_Specified').Value:=RrcDGS9510.ActP_Specified;
+  adotemp11.Parameters.ParamByName('Collect_Type').Value:=(Sender as TSpeedButton).Caption;
+  adotemp11.Parameters.ParamByName('PS_U').Value:=RrcDGS9510.PS_U;
+  adotemp11.Parameters.ParamByName('PS_V').Value:=RrcDGS9510.PS_V;
+  adotemp11.Parameters.ParamByName('PS_W').Value:=RrcDGS9510.PS_W;
+  adotemp11.ExecSQL;
+  ADOQuery2.Requery([]);
 
-    adotemp22:=tadoquery.Create(nil);
-    adotemp22.Connection:=DM.ADOConnection1;
-    adotemp22.Close;
-    adotemp22.SQL.Clear;
-    adotemp22.SQL.Add(' SELECT @@identity AS Insert_Identity; ');
-    adotemp22.Open;
-    Insert_Identity:=adotemp22.fieldbyname('Insert_Identity').AsInteger;
-    adotemp22.Free;
+  adotemp22:=tadoquery.Create(nil);
+  adotemp22.Connection:=DM.ADOConnection1;
+  adotemp22.Close;
+  adotemp22.SQL.Clear;
+  adotemp22.SQL.Add(' SELECT @@identity AS Insert_Identity; ');
+  adotemp22.Open;
+  Insert_Identity:=adotemp22.fieldbyname('Insert_Identity').AsInteger;
+  adotemp22.Free;
 
   adotemp11.Free;
   AdoQuery2.Locate('Unid',Insert_Identity,[loCaseInsensitive]) ;
+
+  Screen.Cursor := Save_Cursor;
+  (Sender as TSpeedButton).Enabled:=true;
 end;
 
 procedure TfrmMain.update_Ado_dtl;
@@ -768,12 +863,12 @@ var
 begin
   if not ADOQuery1.Active then exit;
 
-  strsql11:='select IIf(ActP_Specified=0,NULL,ActP_Total/ActP_Specified*100) as 负荷,'+
+  strsql11:='select IIf(ActP_Specified=0,NULL,ActP_Total/ActP_Specified*100) as 负荷,Collect_Type as 采集类型,'+
             'Create_Time as 采集时间,OutU_UV as 线电压UV,OutU_VW AS 线电压VW,OutU_WU AS 线电压WU,'+
             'OutA_U AS 电流U,OutA_V AS 电流V,OutA_W AS 电流W,'+
             'ActP_Total AS 总有功功率,ReactP_Total as 总无功功率,'+
             'PF_Avg as 平均功率因数,Exc_V as 励磁电压,Exc_A as 励磁电流,PS_HZ as 频率,ActP_Specified as 额定功率,'+
-            'Operator as 操作者,Unid '+
+            'PS_U as 相序U,PS_V as 相序V,PS_W as 相序W,Operator as 操作者,Unid '+
             ' from Test_Slave where pkunid=:pkunid order by Unid';
 
   ADOQuery2.Close;
@@ -791,7 +886,8 @@ procedure TfrmMain.ADOQuery2AfterOpen(DataSet: TDataSet);
 begin
   if not DataSet.Active then exit;
   dbgrid2.Columns.Items[0].Width:=30;
-  dbgrid2.Columns.Items[1].Width:=140;
+  dbgrid2.Columns.Items[1].Width:=65;
+  dbgrid2.Columns.Items[2].Width:=140;
 end;
 
 procedure TfrmMain.SpeedButton6Click(Sender: TObject);
@@ -843,7 +939,6 @@ procedure TfrmMain.frReport1GetValue(const ParName: String;
   var ParValue: Variant);
 var
   adotemp11:tadoquery;
-  i:integer;  
 begin
     if parname='SysTitle' then ParValue:=Panel29.Caption;
 
@@ -899,26 +994,25 @@ begin
       if parname='PS_HZ_3' then ParValue:='';
       //初始化，避免报表变量没有赋值时报错end
 
-    i:=0;
   adotemp11:=tadoquery.Create(nil);
   adotemp11.clone(ADOQuery2);
   while not adotemp11.Eof do
   begin
-    if i=0 then//空载
+    if adotemp11.fieldbyname('采集类型').AsString='空载' then
     begin
       if parname='OutU_UV_0' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
       if parname='OutU_VW_0' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
       if parname='OutU_WU_0' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
-      if parname='OutA_U_0' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
-      if parname='ActP_Total_0' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
-      if parname='ReactP_Total_0' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
-      if parname='PF_Avg_0' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
+      //if parname='OutA_U_0' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
+      //if parname='ActP_Total_0' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
+      //if parname='ReactP_Total_0' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
+      //if parname='PF_Avg_0' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
       if parname='Exc_V_0' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
       if parname='Exc_A_0' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
       if parname='PS_HZ_0' then ParValue:=adotemp11.fieldbyname('频率').AsString;
     end;
 
-    if i=1 then//负载1
+    if adotemp11.fieldbyname('采集类型').AsString='带载PF0.8' then
     begin
       if parname='OutU_UV_1' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
       if parname='OutU_VW_1' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
@@ -932,7 +1026,7 @@ begin
       if parname='PS_HZ_1' then ParValue:=adotemp11.fieldbyname('频率').AsString;
     end;
 
-    if i=2 then//负载2
+    if adotemp11.fieldbyname('采集类型').AsString='带载PF1.0' then
     begin
       if parname='OutU_UV_2' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
       if parname='OutU_VW_2' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
@@ -946,23 +1040,30 @@ begin
       if parname='PS_HZ_2' then ParValue:=adotemp11.fieldbyname('频率').AsString;
     end;
 
-    if i=3 then//负载3
+    if adotemp11.fieldbyname('采集类型').AsString='剩磁电压' then
     begin
       if parname='OutU_UV_3' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
       if parname='OutU_VW_3' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
       if parname='OutU_WU_3' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
-      if parname='OutA_U_3' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
-      if parname='ActP_Total_3' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
-      if parname='ReactP_Total_3' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
-      if parname='PF_Avg_3' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
-      if parname='Exc_V_3' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
-      if parname='Exc_A_3' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
+      //if parname='OutA_U_3' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
+      //if parname='ActP_Total_3' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
+      //if parname='ReactP_Total_3' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
+      //if parname='PF_Avg_3' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
+      //if parname='Exc_V_3' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
+      //if parname='Exc_A_3' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
       if parname='PS_HZ_3' then ParValue:=adotemp11.fieldbyname('频率').AsString;
     end;
 
-    inc(i);
     adotemp11.Next;
   end;
+
+  if parname='PS_Conclusion' then
+  BEGIN
+    if (adotemp11.fieldbyname('相序V').AsFloat>adotemp11.fieldbyname('相序U').AsFloat) AND
+      (adotemp11.fieldbyname('相序V').AsFloat<adotemp11.fieldbyname('相序W').AsFloat) THEN
+    ParValue:='OK' ELSE ParValue:='';
+  END;
+  
   adotemp11.Free;
 end;
 
@@ -978,16 +1079,16 @@ end;
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
 begin
-  inc(iProgressBar);
+//  inc(iProgressBar);
   
-  ProgressBar1.Position:=iProgressBar;
+//  ProgressBar1.Position:=iProgressBar;
 
-  if iProgressBar=10 then
-  begin
-    (Sender as TTimer).Enabled:=false;
-    iProgressBar:=0;
-    if (MessageDlg('是否保存此次采集结果？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
-  end;
+//  if iProgressBar=10 then
+//  begin
+//    (Sender as TTimer).Enabled:=false;
+//    iProgressBar:=0;
+//    if (MessageDlg('是否保存此次采集结果？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
+//  end;
 end;
 
 procedure TfrmMain.DateTimePicker1Change(Sender: TObject);
@@ -998,6 +1099,26 @@ end;
 procedure TfrmMain.DateTimePicker2Change(Sender: TObject);
 begin
   updateAdoQuery1;
+end;
+
+procedure TfrmMain.SpeedButton10Click(Sender: TObject);
+begin
+  ifLoadAdd:=true;
+end;
+
+procedure TfrmMain.SpeedButton11Click(Sender: TObject);
+begin
+  ifLoadReduce:=true;
+end;
+
+procedure TfrmMain.SpeedButton12Click(Sender: TObject);
+begin
+  bSelfDef1:=true;
+end;
+
+procedure TfrmMain.SpeedButton13Click(Sender: TObject);
+begin
+  bSelfDef2:=true;
 end;
 
 end.

@@ -24,9 +24,9 @@ TYPE
   ActP_U,ActP_V,ActP_W,ActP_Total:Double;//有功功率
   ReactP_U,ReactP_V,ReactP_W,ReactP_Total:Double;//无功功率
   PF_U,PF_V,PF_W,PF_Avg:Double;//功率因数
-  PS_U,PS_V,PS_W:integer;//相序
+  PS_U,PS_V,PS_W:Double;//相序
   PS_HZ:Double;//发电频率
-  Exc_V,Exc_A:integer;//励磁电压/电流
+  Exc_V,Exc_A:Double;//励磁电压/电流
   CT_Rate:word;//CT变比
   HZ_Specified:Double;//额定频率
   U_Specified:word;//额定电压
@@ -125,7 +125,7 @@ begin
   frmMain.ComDataPacket1.StartString:=AStr[1];
   frmMain.ComDataPacket1.StopString:='';
   frmMain.ComDataPacket1.Size:=5+iReadDataNum*2;//5是固定长度(1字节地址,1字节功能码,1字节数据长度,2字节CRC);1是读取1个数据(1*2个字节)
-  if AStr[2]=#6 then frmMain.ComDataPacket1.Size:=8;
+  if(AStr[2]=#5)or(AStr[2]=#6) then frmMain.ComDataPacket1.Size:=8;
   ifBusy:=true;
   RFM:='';
   frmMain.ComPort1.WriteStr(AStr+CRC16(AStr));
