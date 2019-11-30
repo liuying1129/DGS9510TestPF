@@ -23,6 +23,7 @@ TYPE
   OutA_U,OutA_V,OutA_W:Double;//输出电流
   ActP_U,ActP_V,ActP_W,ActP_Total:Double;//有功功率
   ReactP_U,ReactP_V,ReactP_W,ReactP_Total:Double;//无功功率
+  ApparentP_A,ApparentP_B,ApparentP_C,ApparentP_Total:Double;//视在功率
   PF_U,PF_V,PF_W,PF_Avg:Double;//功率因数
   PS_U,PS_V,PS_W:Double;//相序
   PS_HZ:Double;//发电频率
@@ -60,6 +61,7 @@ function MakeDBConn:boolean;
 function ShowOptionForm(const pCaption,pTabSheetCaption,pItemInfo,pInifile:Pchar):boolean;stdcall;external 'OptionSetForm.dll';
 function ExecSQLCmd(AConnectionString:string;ASQL:string):integer;
 function ScalarSQLCmd(AConnectionString:string;ASQL:string):string;
+function StrToHex(const ASourStr:Pchar):Pchar;stdcall;external 'LYFunction.dll';
 
 implementation
 
@@ -132,6 +134,11 @@ begin
 
   WAITBUSY(2);
 
+  if length(rfm)<=0 then
+  BEGIN
+    WriteLog('无返回串');
+    exit;
+  END;
   if length(rfm)<3 then
   BEGIN
     WriteLog(PCHAR('返回串长度小于3:'+RFM));

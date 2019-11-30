@@ -86,15 +86,6 @@ type
     Panel8: TPanel;
     Panel9: TPanel;
     Panel13: TPanel;
-    GroupBox4: TGroupBox;
-    Label14: TLabel;
-    Label15: TLabel;
-    Label16: TLabel;
-    Label17: TLabel;
-    Panel14: TPanel;
-    Panel15: TPanel;
-    Panel16: TPanel;
-    Panel17: TPanel;
     GroupBox5: TGroupBox;
     Label18: TLabel;
     Label19: TLabel;
@@ -146,6 +137,22 @@ type
     SpeedButton11: TSpeedButton;
     SpeedButton12: TSpeedButton;
     SpeedButton13: TSpeedButton;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    Label36: TLabel;
+    Label37: TLabel;
+    Label38: TLabel;
+    Label39: TLabel;
+    Panel36: TPanel;
+    Panel37: TPanel;
+    Panel38: TPanel;
+    Panel39: TPanel;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -246,6 +253,11 @@ begin
   Panel16.Caption:=floattostr(RrcDGS9510.ReactP_W);
   Panel17.Caption:=floattostr(RrcDGS9510.ReactP_Total);
 
+  Panel36.Caption:=floattostr(RrcDGS9510.ApparentP_A);
+  Panel37.Caption:=floattostr(RrcDGS9510.ApparentP_B);
+  Panel38.Caption:=floattostr(RrcDGS9510.ApparentP_C);
+  Panel39.Caption:=floattostr(RrcDGS9510.ApparentP_Total);
+
   Panel18.Caption:=floattostr(RrcDGS9510.PF_U);
   Panel19.Caption:=floattostr(RrcDGS9510.PF_V);
   Panel20.Caption:=floattostr(RrcDGS9510.PF_W);
@@ -275,7 +287,7 @@ begin
 
   (Sender as TTimer).Enabled:=false;
 
-  WriteLog(pchar('本次开始'+FormatDateTime('hh:nn:ss zzz',Now())));
+  //WriteLog(pchar('本次开始'+FormatDateTime('hh:nn:ss zzz',Now())));
 
   {if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_UNKNOW+#0#0#0#$10) then
   begin
@@ -304,27 +316,36 @@ begin
     RrcDGS9510.PS_W:=Decode2Byte(copy(RFM,20,2))/10;
     RrcDGS9510.PS_HZ:=Decode2Byte(copy(RFM,22,2))/100;
 
-    RrcDGS9510.OutA_U:=Decode2Byte(copy(RFM,44,2));
-    RrcDGS9510.OutA_V:=Decode2Byte(copy(RFM,46,2));
-    RrcDGS9510.OutA_W:=Decode2Byte(copy(RFM,48,2));
+    RrcDGS9510.OutA_U:=Decode2Byte(copy(RFM,44,2))/10;
+    RrcDGS9510.OutA_V:=Decode2Byte(copy(RFM,46,2))/10;
+    RrcDGS9510.OutA_W:=Decode2Byte(copy(RFM,48,2))/10;
 
     RrcDGS9510.ActP_U:=Decode4Byte(copy(RFM,60,4));
     RrcDGS9510.ActP_V:=Decode4Byte(copy(RFM,64,4));
     RrcDGS9510.ActP_W:=Decode4Byte(copy(RFM,68,4));
     RrcDGS9510.ActP_Total:=Decode4Byte(copy(RFM,72,4));
+    WriteLog(pchar('总有功功率4字节:'+copy(RFM,72,4)+' '+StrToHex(pchar(copy(RFM,72,4)))));
 
     RrcDGS9510.ReactP_U:=Decode4Byte(copy(RFM,76,4));
     RrcDGS9510.ReactP_V:=Decode4Byte(copy(RFM,80,4));
     RrcDGS9510.ReactP_W:=Decode4Byte(copy(RFM,84,4));
     RrcDGS9510.ReactP_Total:=Decode4Byte(copy(RFM,88,4));
 
+    RrcDGS9510.ApparentP_A:=Decode4Byte(copy(RFM,92,4));
+    RrcDGS9510.ApparentP_B:=Decode4Byte(copy(RFM,96,4));
+    RrcDGS9510.ApparentP_C:=Decode4Byte(copy(RFM,100,4));
+    RrcDGS9510.ApparentP_Total:=Decode4Byte(copy(RFM,104,4));
+
     RrcDGS9510.PF_U:=Decode2Byte(copy(RFM,108,2))/100;
     RrcDGS9510.PF_V:=Decode2Byte(copy(RFM,110,2))/100;
     RrcDGS9510.PF_W:=Decode2Byte(copy(RFM,112,2))/100;
     RrcDGS9510.PF_Avg:=Decode2Byte(copy(RFM,114,2))/100;
 
-    RrcDGS9510.Exc_V:=Decode2Byte(copy(RFM,138,2))/10;//该地址为电池电压,用作励磁电压
-    RrcDGS9510.Exc_A:=Decode2Byte(copy(RFM,140,2))/10;//该地址为充电机电压,用作励磁电流
+    //RrcDGS9510.Exc_V:=Decode2Byte(copy(RFM,138,2))/10;//该地址为电池电压
+    //RrcDGS9510.Exc_A:=Decode2Byte(copy(RFM,140,2))/10;//该地址为充电机电压
+
+    RrcDGS9510.Exc_V:=Decode2Byte(copy(RFM,164,2));//该地址为可编程传感器1数值,用作励磁电压
+    RrcDGS9510.Exc_A:=Decode2Byte(copy(RFM,168,2));//该地址为可编程传感器2数值,用作励磁电流
   end;
 
   if ifReadParam then//读取参数
@@ -420,7 +441,7 @@ begin
     dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$22#$ff#0);
   end;
 
-  WriteLog(pchar('本次结束'+FormatDateTime('hh:nn:ss zzz',Now())));
+  //WriteLog(pchar('本次结束'+FormatDateTime('hh:nn:ss zzz',Now())));
 
   (Sender as TTimer).Enabled:=true;
 end;
@@ -814,8 +835,8 @@ begin
   adotemp11.Connection:=DM.ADOConnection1;
 
   sqlstr:='Insert into Test_Slave ('+
-                      ' PkUnid, OutU_UV, OutU_VW, OutU_WU, OutA_U, OutA_V, OutA_W, ActP_Total, ReactP_Total, PF_Avg, Exc_V, Exc_A, PS_HZ, Operator, ActP_Specified, Collect_Type, PS_U, PS_V, PS_W) values ('+
-                      ':PkUnid,:OutU_UV,:OutU_VW,:OutU_WU,:OutA_U,:OutA_V,:OutA_W,:ActP_Total,:ReactP_Total,:PF_Avg,:Exc_V,:Exc_A,:PS_HZ,:Operator,:ActP_Specified,:Collect_Type,:PS_U,:PS_V,:PS_W); ';
+                      ' PkUnid, OutU_UV, OutU_VW, OutU_WU, OutA_U, OutA_V, OutA_W, ActP_Total, ReactP_Total, PF_Avg, Exc_V, Exc_A, PS_HZ, Operator, ActP_Specified, Collect_Type, PS_U, PS_V, PS_W, ApparentP_Total) values ('+
+                      ':PkUnid,:OutU_UV,:OutU_VW,:OutU_WU,:OutA_U,:OutA_V,:OutA_W,:ActP_Total,:ReactP_Total,:PF_Avg,:Exc_V,:Exc_A,:PS_HZ,:Operator,:ActP_Specified,:Collect_Type,:PS_U,:PS_V,:PS_W,:ApparentP_Total); ';
   adotemp11.Close;
   adotemp11.SQL.Clear;
   adotemp11.SQL.Add(sqlstr);
@@ -838,6 +859,7 @@ begin
   adotemp11.Parameters.ParamByName('PS_U').Value:=RrcDGS9510.PS_U;
   adotemp11.Parameters.ParamByName('PS_V').Value:=RrcDGS9510.PS_V;
   adotemp11.Parameters.ParamByName('PS_W').Value:=RrcDGS9510.PS_W;
+  adotemp11.Parameters.ParamByName('ApparentP_Total').Value:=RrcDGS9510.ApparentP_Total;
   adotemp11.ExecSQL;
   ADOQuery2.Requery([]);
 
@@ -866,7 +888,7 @@ begin
   strsql11:='select IIf(ActP_Specified=0,NULL,ActP_Total/ActP_Specified*100) as 负荷,Collect_Type as 采集类型,'+
             'Create_Time as 采集时间,OutU_UV as 线电压UV,OutU_VW AS 线电压VW,OutU_WU AS 线电压WU,'+
             'OutA_U AS 电流U,OutA_V AS 电流V,OutA_W AS 电流W,'+
-            'ActP_Total AS 总有功功率,ReactP_Total as 总无功功率,'+
+            'ActP_Total AS 总有功功率,ReactP_Total as 总无功功率,ApparentP_Total as 总视在功率,'+
             'PF_Avg as 平均功率因数,Exc_V as 励磁电压,Exc_A as 励磁电流,PS_HZ as 频率,ActP_Specified as 额定功率,'+
             'PS_U as 相序U,PS_V as 相序V,PS_W as 相序W,Operator as 操作者,Unid '+
             ' from Test_Slave where pkunid=:pkunid order by Unid';
@@ -960,12 +982,23 @@ begin
     if parname='TestDate' then ParValue:=ADOQuery1.fieldbyname('测试日期').AsString;
 
       //初始化，避免报表变量没有赋值时报错begin
+      if parname='OutU_UV_0' then ParValue:='';
+      if parname='OutU_VW_0' then ParValue:='';
+      if parname='OutU_WU_0' then ParValue:='';
+      //if parname='OutA_U_0' then ParValue:='';
+      //if parname='ActP_Total_0' then ParValue:='';
+      //if parname='ReactP_Total_0' then ParValue:='';
+      //if parname='PF_Avg_0' then ParValue:='';
+      if parname='Exc_V_0' then ParValue:='';
+      if parname='Exc_A_0' then ParValue:='';
+      if parname='PS_HZ_0' then ParValue:='';
+
       if parname='OutU_UV_1' then ParValue:='';
       if parname='OutU_VW_1' then ParValue:='';
       if parname='OutU_WU_1' then ParValue:='';
       if parname='OutA_U_1' then ParValue:='';
       if parname='ActP_Total_1' then ParValue:='';
-      if parname='ReactP_Total_1' then ParValue:='';
+      if parname='ApparentP_Total_1' then ParValue:='';
       if parname='PF_Avg_1' then ParValue:='';
       if parname='Exc_V_1' then ParValue:='';
       if parname='Exc_A_1' then ParValue:='';
@@ -976,7 +1009,7 @@ begin
       if parname='OutU_WU_2' then ParValue:='';
       if parname='OutA_U_2' then ParValue:='';
       if parname='ActP_Total_2' then ParValue:='';
-      if parname='ReactP_Total_2' then ParValue:='';
+      if parname='ApparentP_Total_2' then ParValue:='';
       if parname='PF_Avg_2' then ParValue:='';
       if parname='Exc_V_2' then ParValue:='';
       if parname='Exc_A_2' then ParValue:='';
@@ -986,11 +1019,11 @@ begin
       if parname='OutU_VW_3' then ParValue:='';
       if parname='OutU_WU_3' then ParValue:='';
       if parname='OutA_U_3' then ParValue:='';
-      if parname='ActP_Total_3' then ParValue:='';
-      if parname='ReactP_Total_3' then ParValue:='';
-      if parname='PF_Avg_3' then ParValue:='';
-      if parname='Exc_V_3' then ParValue:='';
-      if parname='Exc_A_3' then ParValue:='';
+      //if parname='ActP_Total_3' then ParValue:='';
+      //if parname='ReactP_Total_3' then ParValue:='';
+      //if parname='PF_Avg_3' then ParValue:='';
+      //if parname='Exc_V_3' then ParValue:='';
+      //if parname='Exc_A_3' then ParValue:='';
       if parname='PS_HZ_3' then ParValue:='';
       //初始化，避免报表变量没有赋值时报错end
 
@@ -1019,7 +1052,7 @@ begin
       if parname='OutU_WU_1' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
       if parname='OutA_U_1' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
       if parname='ActP_Total_1' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
-      if parname='ReactP_Total_1' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
+      if parname='ApparentP_Total_1' then ParValue:=adotemp11.fieldbyname('总视在功率').AsString;
       if parname='PF_Avg_1' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
       if parname='Exc_V_1' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
       if parname='Exc_A_1' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
@@ -1033,7 +1066,7 @@ begin
       if parname='OutU_WU_2' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
       if parname='OutA_U_2' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
       if parname='ActP_Total_2' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
-      if parname='ReactP_Total_2' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
+      if parname='ApparentP_Total_2' then ParValue:=adotemp11.fieldbyname('总视在功率').AsString;
       if parname='PF_Avg_2' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
       if parname='Exc_V_2' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
       if parname='Exc_A_2' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
@@ -1061,7 +1094,7 @@ begin
   BEGIN
     if (adotemp11.fieldbyname('相序V').AsFloat>adotemp11.fieldbyname('相序U').AsFloat) AND
       (adotemp11.fieldbyname('相序V').AsFloat<adotemp11.fieldbyname('相序W').AsFloat) THEN
-    ParValue:='OK' ELSE ParValue:='';
+    ParValue:='OK' ELSE ParValue:='BAD';
   END;
   
   adotemp11.Free;

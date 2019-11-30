@@ -715,7 +715,7 @@ object frmMain: TfrmMain
     end
     object GroupBox2: TGroupBox
       Left = 10
-      Top = 142
+      Top = 144
       Width = 530
       Height = 60
       Caption = #36755#20986#30005#27969'(A)'
@@ -795,10 +795,10 @@ object frmMain: TfrmMain
     end
     object GroupBox3: TGroupBox
       Left = 10
-      Top = 208
+      Top = 214
       Width = 530
-      Height = 60
-      Caption = #26377#21151#29575'(KW)'
+      Height = 121
+      Caption = #21151#29575
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -807,35 +807,91 @@ object frmMain: TfrmMain
       ParentFont = False
       TabOrder = 2
       object Label7: TLabel
-        Left = 15
+        Left = 16
         Top = 27
-        Width = 7
+        Width = 94
         Height = 13
-        Caption = 'U'
+        Caption = #26377#21151#21151#29575'(KW) U'
       end
       object Label8: TLabel
-        Left = 127
+        Left = 198
         Top = 27
         Width = 7
         Height = 13
         Caption = 'V'
       end
       object Label9: TLabel
-        Left = 233
+        Left = 293
         Top = 27
         Width = 7
         Height = 13
         Caption = 'W'
       end
       object Label13: TLabel
-        Left = 386
+        Left = 383
         Top = 27
-        Width = 52
+        Width = 65
         Height = 13
-        Caption = #24635#26377#21151#29575
+        Caption = #24635#26377#21151#21151#29575
+      end
+      object Label14: TLabel
+        Left = 2
+        Top = 60
+        Width = 108
+        Height = 13
+        Caption = #26080#21151#21151#29575'(KVar) U'
+      end
+      object Label15: TLabel
+        Left = 198
+        Top = 60
+        Width = 7
+        Height = 13
+        Caption = 'V'
+      end
+      object Label16: TLabel
+        Left = 293
+        Top = 60
+        Width = 7
+        Height = 13
+        Caption = 'W'
+      end
+      object Label17: TLabel
+        Left = 383
+        Top = 60
+        Width = 65
+        Height = 13
+        Caption = #24635#26080#21151#21151#29575
+      end
+      object Label36: TLabel
+        Left = 9
+        Top = 92
+        Width = 101
+        Height = 13
+        Caption = #35270#22312#21151#29575'(kVA) U'
+      end
+      object Label37: TLabel
+        Left = 198
+        Top = 92
+        Width = 7
+        Height = 13
+        Caption = 'V'
+      end
+      object Label38: TLabel
+        Left = 293
+        Top = 92
+        Width = 7
+        Height = 13
+        Caption = 'W'
+      end
+      object Label39: TLabel
+        Left = 383
+        Top = 92
+        Width = 65
+        Height = 13
+        Caption = #24635#35270#22312#21151#29575
       end
       object Panel7: TPanel
-        Left = 31
+        Left = 112
         Top = 18
         Width = 75
         Height = 30
@@ -850,7 +906,7 @@ object frmMain: TfrmMain
         TabOrder = 0
       end
       object Panel8: TPanel
-        Left = 143
+        Left = 207
         Top = 18
         Width = 75
         Height = 30
@@ -865,7 +921,7 @@ object frmMain: TfrmMain
         TabOrder = 1
       end
       object Panel9: TPanel
-        Left = 249
+        Left = 302
         Top = 18
         Width = 75
         Height = 30
@@ -880,7 +936,7 @@ object frmMain: TfrmMain
         TabOrder = 2
       end
       object Panel13: TPanel
-        Left = 443
+        Left = 450
         Top = 18
         Width = 75
         Height = 30
@@ -894,51 +950,9 @@ object frmMain: TfrmMain
         ParentFont = False
         TabOrder = 3
       end
-    end
-    object GroupBox4: TGroupBox
-      Left = 10
-      Top = 276
-      Width = 530
-      Height = 60
-      Caption = #26080#21151#29575'(Kvar)'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 3
-      object Label14: TLabel
-        Left = 15
-        Top = 26
-        Width = 7
-        Height = 13
-        Caption = 'U'
-      end
-      object Label15: TLabel
-        Left = 127
-        Top = 26
-        Width = 7
-        Height = 13
-        Caption = 'V'
-      end
-      object Label16: TLabel
-        Left = 233
-        Top = 26
-        Width = 7
-        Height = 13
-        Caption = 'W'
-      end
-      object Label17: TLabel
-        Left = 386
-        Top = 26
-        Width = 52
-        Height = 13
-        Caption = #24635#26080#21151#29575
-      end
       object Panel14: TPanel
-        Left = 31
-        Top = 17
+        Left = 112
+        Top = 51
         Width = 75
         Height = 30
         Caption = '0.00'
@@ -949,11 +963,11 @@ object frmMain: TfrmMain
         Font.Name = #24494#36719#38597#40657
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 0
+        TabOrder = 4
       end
       object Panel15: TPanel
-        Left = 143
-        Top = 17
+        Left = 207
+        Top = 51
         Width = 75
         Height = 30
         Caption = '0.00'
@@ -964,11 +978,11 @@ object frmMain: TfrmMain
         Font.Name = #24494#36719#38597#40657
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 5
       end
       object Panel16: TPanel
-        Left = 249
-        Top = 17
+        Left = 302
+        Top = 51
         Width = 75
         Height = 30
         Caption = '0.00'
@@ -979,11 +993,11 @@ object frmMain: TfrmMain
         Font.Name = #24494#36719#38597#40657
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 6
       end
       object Panel17: TPanel
-        Left = 443
-        Top = 17
+        Left = 450
+        Top = 51
         Width = 75
         Height = 30
         Caption = '0.00'
@@ -994,7 +1008,67 @@ object frmMain: TfrmMain
         Font.Name = #24494#36719#38597#40657
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 7
+      end
+      object Panel36: TPanel
+        Left = 112
+        Top = 83
+        Width = 75
+        Height = 30
+        Caption = '0.00'
+        Color = clBackground
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clLime
+        Font.Height = -16
+        Font.Name = #24494#36719#38597#40657
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 8
+      end
+      object Panel37: TPanel
+        Left = 207
+        Top = 83
+        Width = 75
+        Height = 30
+        Caption = '0.00'
+        Color = clBackground
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clLime
+        Font.Height = -16
+        Font.Name = #24494#36719#38597#40657
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 9
+      end
+      object Panel38: TPanel
+        Left = 302
+        Top = 83
+        Width = 75
+        Height = 30
+        Caption = '0.00'
+        Color = clBackground
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clLime
+        Font.Height = -16
+        Font.Name = #24494#36719#38597#40657
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 10
+      end
+      object Panel39: TPanel
+        Left = 450
+        Top = 83
+        Width = 75
+        Height = 30
+        Caption = '0.00'
+        Color = clBackground
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clLime
+        Font.Height = -16
+        Font.Name = #24494#36719#38597#40657
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 11
       end
     end
     object GroupBox5: TGroupBox
@@ -1009,7 +1083,7 @@ object frmMain: TfrmMain
       Font.Name = #23435#20307
       Font.Style = []
       ParentFont = False
-      TabOrder = 4
+      TabOrder = 3
       object Label18: TLabel
         Left = 14
         Top = 27
@@ -1101,7 +1175,7 @@ object frmMain: TfrmMain
     end
     object GroupBox6: TGroupBox
       Left = 10
-      Top = 414
+      Top = 412
       Width = 530
       Height = 60
       Caption = #30456#24207
@@ -1111,7 +1185,7 @@ object frmMain: TfrmMain
       Font.Name = #23435#20307
       Font.Style = []
       ParentFont = False
-      TabOrder = 5
+      TabOrder = 4
       object Label22: TLabel
         Left = 14
         Top = 26
@@ -1214,7 +1288,7 @@ object frmMain: TfrmMain
       Font.Name = #24494#36719#38597#40657
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 6
+      TabOrder = 5
     end
     object Panel27: TPanel
       Left = 454
@@ -1229,7 +1303,7 @@ object frmMain: TfrmMain
       Font.Name = #24494#36719#38597#40657
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 6
     end
     object Panel28: TPanel
       Left = 41
@@ -1244,7 +1318,7 @@ object frmMain: TfrmMain
       Font.Name = #24494#36719#38597#40657
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
     end
     object GroupBox8: TGroupBox
       Left = 10
@@ -1252,7 +1326,7 @@ object frmMain: TfrmMain
       Width = 280
       Height = 91
       Caption = #37319#38598
-      TabOrder = 9
+      TabOrder = 8
       object SpeedButton5: TSpeedButton
         Left = 15
         Top = 19
