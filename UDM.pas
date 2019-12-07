@@ -35,7 +35,6 @@ TYPE
 END;
   
 const
-  //EQUIP_ADDR=#$01;
   FUNC_CODE_READ_REGISTER=#$03;
   FUNC_CODE_UNKNOW=#$04;
   FUNC_CODE_WRITE_SWITCH=#$05;
@@ -51,10 +50,10 @@ var
   
 function CRC16(AStr:ShortString):ShortString;stdcall;external 'LYFunction.dll';
 procedure WriteLog(const ALogStr: Pchar);stdcall;external 'LYFunction.dll';
-function ByteToReal(AByte1,AByte2,AByte3,AByte4:byte):single;stdcall;external 'LYFunction.dll';
-function RealTo4Byte(AReal:single):Pchar;stdcall;external 'LYFunction.dll';
 FUNCTION Decode2Byte(S:STRING):Word;
 FUNCTION Decode4Byte(S:STRING):Cardinal;
+FUNCTION Decode2ByteNPN(S:STRING):Smallint;//2字节,有符号(有正负)
+FUNCTION Decode4ByteNPN(S:STRING):Longint;//4字节,有符号(有正负)
 FUNCTION Encode2Byte(w:word):STRING;
 function TryStrToFloatExt(const pSourStr:Pchar; var Value: Double): Boolean;stdcall;external 'LYFunction.dll';
 function MakeDBConn:boolean;
@@ -62,6 +61,7 @@ function ShowOptionForm(const pCaption,pTabSheetCaption,pItemInfo,pInifile:Pchar
 function ExecSQLCmd(AConnectionString:string;ASQL:string):integer;
 function ScalarSQLCmd(AConnectionString:string;ASQL:string):string;
 function StrToHex(const ASourStr:Pchar):Pchar;stdcall;external 'LYFunction.dll';
+
 
 implementation
 
@@ -80,7 +80,7 @@ begin
     ifBusy:=false;
 end;
 
-FUNCTION Decode2Byte(S:STRING):Word;
+FUNCTION Decode2Byte(S:STRING):Word;//2字节,无符号(正数)
 begin
   result:=0;
   if length(s)<>2 then exit;
@@ -88,12 +88,48 @@ begin
   result:=256*ord(s[1])+ord(s[2]);
 end;
 
-FUNCTION Decode4Byte(S:STRING):Cardinal;
+FUNCTION Decode2ByteNPN(S:STRING):Smallint;//2字节,有符号(有正负)
+var
+  J:Int64;
+begin
+  result:=0;
+  if length(s)<>2 then exit;
+
+  J:=256*ord(s[1])+ord(s[2]);
+  
+  if ord(s[1])>=128 then
+  BEGIN
+    J := -J;
+    J := J and $FFFF;
+    J := -J;
+  END;
+  result:=J;
+end;
+
+FUNCTION Decode4Byte(S:STRING):Cardinal;//4字节,无符号(正数)
 begin
   result:=0;
   if length(s)<>4 then exit;
 
   result:=ord(s[3])*16777216+ord(s[4])*65536+ord(s[1])*256+ord(s[2]);
+end;
+
+FUNCTION Decode4ByteNPN(S:STRING):Longint;//4字节,有符号(有正负)
+var
+  J:Int64;
+begin
+  result:=0;
+  if length(s)<>4 then exit;
+
+  J:=ord(s[3])*16777216+ord(s[4])*65536+ord(s[1])*256+ord(s[2]);
+  
+  if ord(s[3])>=128 then
+  BEGIN
+    J := -J;
+    J := J and $FFFFFFFF;
+    J := -J;
+  END;
+  result:=J;
 end;
 
 FUNCTION Encode2Byte(w:word):STRING;

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls, Spin,
   CPortCtl, ToolWin, inifiles, CPort,StrUtils, DB, ADODB, ActnList, DosMove,
-  FR_Class,Math{RoundTo};
+  FR_Class;
 
 type
   TfrmMain = class(TForm)
@@ -121,7 +121,6 @@ type
     Panel34: TPanel;
     SpeedButton9: TSpeedButton;
     LabeledEdit19: TLabeledEdit;
-    Timer1: TTimer;
     Panel35: TPanel;
     DateTimePicker1: TDateTimePicker;
     DateTimePicker2: TDateTimePicker;
@@ -153,8 +152,6 @@ type
     Panel37: TPanel;
     Panel38: TPanel;
     Panel39: TPanel;
-    SpeedButton14: TSpeedButton;
-    SpeedButton15: TSpeedButton;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -186,15 +183,24 @@ type
     procedure frReport1GetValue(const ParName: String;
       var ParValue: Variant);
     procedure SpeedButton9Click(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
     procedure DateTimePicker1Change(Sender: TObject);
     procedure DateTimePicker2Change(Sender: TObject);
-    procedure SpeedButton10Click(Sender: TObject);
-    procedure SpeedButton11Click(Sender: TObject);
-    procedure SpeedButton12Click(Sender: TObject);
-    procedure SpeedButton13Click(Sender: TObject);
-    procedure SpeedButton14Click(Sender: TObject);
-    procedure SpeedButton15Click(Sender: TObject);
+    procedure SpeedButton10MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton10MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton11MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton11MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton12MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton12MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton13MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton13MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
     ifnewadd:boolean;
@@ -219,20 +225,16 @@ var
   ifSetU:boolean;
   ifSetActP:boolean;
 
-  ifLoadAdd:boolean;
-  ifLoadReduce:boolean;
+  ifLoadAdd,ifLoadAdd2:boolean;
+  ifLoadReduce,ifLoadReduce2:boolean;
 
-  bSelfDef1:boolean;
-  bSelfDef2:boolean;
-
-  ifA,ifB:boolean;
+  bSelfDef1,bSelfDef12:boolean;
+  bSelfDef2,bSelfDef22:boolean;
 
   W_CT_Rate:integer;//CT变比
   W_U_Specified:integer;//额定电压
   F_HZ_Specified:Double;//额定频率
   W_ActP_Specified:integer;//额定功率
-
-  //iProgressBar:integer;
 
 {$R *.dfm}
 
@@ -278,8 +280,8 @@ begin
   Panel27.Caption:=floattostr(RrcDGS9510.Exc_A);
 
   if RrcDGS9510.ActP_Specified<>0 then
-    //Panel28.Caption:=format('%.1f',[RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100]);
-    Panel28.Caption:=floattostr(RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100);
+    Panel28.Caption:=format('%.1f',[RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100]);
+    //Panel28.Caption:=floattostr(RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100);
 
   Label31.Caption:=inttostr(RrcDGS9510.CT_Rate);
   Label33.Caption:=floattostr(RrcDGS9510.HZ_Specified);
@@ -317,40 +319,48 @@ begin
     RrcDGS9510.OutU_V:=Decode2Byte(copy(RFM,12,2));
     RrcDGS9510.OutU_W:=Decode2Byte(copy(RFM,14,2));
 
-    RrcDGS9510.PS_U:=Decode2Byte(copy(RFM,16,2))/10;
-    RrcDGS9510.PS_V:=Decode2Byte(copy(RFM,18,2))/10;
-    RrcDGS9510.PS_W:=Decode2Byte(copy(RFM,20,2))/10;
+    RrcDGS9510.PS_U:=Decode2ByteNPN(copy(RFM,16,2))/10;
+    RrcDGS9510.PS_V:=Decode2ByteNPN(copy(RFM,18,2))/10;
+    RrcDGS9510.PS_W:=Decode2ByteNPN(copy(RFM,20,2))/10;
     RrcDGS9510.PS_HZ:=Decode2Byte(copy(RFM,22,2))/100;
 
     RrcDGS9510.OutA_U:=Decode2Byte(copy(RFM,44,2))/10;
     RrcDGS9510.OutA_V:=Decode2Byte(copy(RFM,46,2))/10;
     RrcDGS9510.OutA_W:=Decode2Byte(copy(RFM,48,2))/10;
 
-    RrcDGS9510.ActP_U:=Decode4Byte(copy(RFM,60,4))/10;
-    RrcDGS9510.ActP_V:=Decode4Byte(copy(RFM,64,4))/10;
-    RrcDGS9510.ActP_W:=Decode4Byte(copy(RFM,68,4))/10;
-    RrcDGS9510.ActP_Total:=Decode4Byte(copy(RFM,72,4))/10;
+    RrcDGS9510.ActP_U:=Decode4ByteNPN(copy(RFM,60,4))/10;
+    RrcDGS9510.ActP_V:=Decode4ByteNPN(copy(RFM,64,4))/10;
+    RrcDGS9510.ActP_W:=Decode4ByteNPN(copy(RFM,68,4))/10;
+    RrcDGS9510.ActP_Total:=Decode4ByteNPN(copy(RFM,72,4))/10;
+    WriteLog(pchar('有功字节1:'+inttostr(ord(RFM[72]))));
+    WriteLog(pchar('有功字节2:'+inttostr(ord(RFM[73]))));
+    WriteLog(pchar('有功字节3:'+inttostr(ord(RFM[74]))));
+    WriteLog(pchar('有功字节4:'+inttostr(ord(RFM[75]))));
 
-    RrcDGS9510.ReactP_U:=Decode4Byte(copy(RFM,76,4))/10;
-    RrcDGS9510.ReactP_V:=Decode4Byte(copy(RFM,80,4))/10;
-    RrcDGS9510.ReactP_W:=Decode4Byte(copy(RFM,84,4))/10;
-    RrcDGS9510.ReactP_Total:=Decode4Byte(copy(RFM,88,4))/10;
+    RrcDGS9510.ReactP_U:=Decode4ByteNPN(copy(RFM,76,4))/10;
+    RrcDGS9510.ReactP_V:=Decode4ByteNPN(copy(RFM,80,4))/10;
+    RrcDGS9510.ReactP_W:=Decode4ByteNPN(copy(RFM,84,4))/10;
+    RrcDGS9510.ReactP_Total:=Decode4ByteNPN(copy(RFM,88,4))/10;
+    WriteLog(pchar('无功字节1:'+inttostr(ord(RFM[88]))));
+    WriteLog(pchar('无功字节2:'+inttostr(ord(RFM[89]))));
+    WriteLog(pchar('无功字节3:'+inttostr(ord(RFM[90]))));
+    WriteLog(pchar('无功字节4:'+inttostr(ord(RFM[91]))));
 
-    RrcDGS9510.ApparentP_A:=Decode4Byte(copy(RFM,92,4))/10;
-    RrcDGS9510.ApparentP_B:=Decode4Byte(copy(RFM,96,4))/10;
-    RrcDGS9510.ApparentP_C:=Decode4Byte(copy(RFM,100,4))/10;
-    RrcDGS9510.ApparentP_Total:=Decode4Byte(copy(RFM,104,4))/10;
+    RrcDGS9510.ApparentP_A:=Decode4ByteNPN(copy(RFM,92,4))/10;
+    RrcDGS9510.ApparentP_B:=Decode4ByteNPN(copy(RFM,96,4))/10;
+    RrcDGS9510.ApparentP_C:=Decode4ByteNPN(copy(RFM,100,4))/10;
+    RrcDGS9510.ApparentP_Total:=Decode4ByteNPN(copy(RFM,104,4))/10;
 
-    RrcDGS9510.PF_U:=Decode2Byte(copy(RFM,108,2))/100;
-    RrcDGS9510.PF_V:=Decode2Byte(copy(RFM,110,2))/100;
-    RrcDGS9510.PF_W:=Decode2Byte(copy(RFM,112,2))/100;
-    RrcDGS9510.PF_Avg:=Decode2Byte(copy(RFM,114,2))/100;
+    RrcDGS9510.PF_U:=Decode2ByteNPN(copy(RFM,108,2))/100;
+    RrcDGS9510.PF_V:=Decode2ByteNPN(copy(RFM,110,2))/100;
+    RrcDGS9510.PF_W:=Decode2ByteNPN(copy(RFM,112,2))/100;
+    RrcDGS9510.PF_Avg:=Decode2ByteNPN(copy(RFM,114,2))/100;
 
     //RrcDGS9510.Exc_V:=Decode2Byte(copy(RFM,138,2))/10;//该地址为电池电压
     //RrcDGS9510.Exc_A:=Decode2Byte(copy(RFM,140,2))/10;//该地址为充电机电压
 
-    RrcDGS9510.Exc_V:=Decode2Byte(copy(RFM,164,2));//该地址为可编程传感器1数值,用作励磁电压
-    RrcDGS9510.Exc_A:=Decode2Byte(copy(RFM,168,2));//该地址为可编程传感器2数值,用作励磁电流
+    RrcDGS9510.Exc_V:=Decode2ByteNPN(copy(RFM,164,2))/10;//该地址为可编程传感器1数值,用作励磁电压
+    RrcDGS9510.Exc_A:=Decode2ByteNPN(copy(RFM,168,2))/100;//该地址为可编程传感器2数值,用作励磁电流
   end;
 
   if ifReadParam then//读取参数
@@ -422,40 +432,52 @@ begin
     ifReadParam:=true;
   end;
 
-  if ifLoadAdd then//负载加
+  if ifLoadAdd then//负载加输出
   begin
     ifLoadAdd:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#19#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#20#$ff#0);
   end;
 
-  if ifLoadReduce then//负载减
+  if ifLoadAdd2 then//负载加不输出
+  begin
+    ifLoadAdd2:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#20#$0#0);
+  end;
+
+  if ifLoadReduce then//负载减输出
   begin
     ifLoadReduce:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#20#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#21#$ff#0);
+  end;
+
+  if ifLoadReduce2 then//负载减不输出
+  begin
+    ifLoadReduce2:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#21#$0#0);
   end;
 
   if bSelfDef1 then//自定义输出1
   begin
     bSelfDef1:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#21#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#22#$ff#0);
+  end;
+
+  if bSelfDef12 then//自定义不输出1
+  begin
+    bSelfDef12:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#22#$0#0);
   end;
 
   if bSelfDef2 then//自定义输出2
   begin
     bSelfDef2:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#22#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#23#$ff#0);
   end;
 
-  if ifA then//自定义输出1
+  if bSelfDef22 then//自定义不输出2
   begin
-    ifA:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#3#$ff#0);
-  end;
-
-  if ifB then//自定义输出2
-  begin
-    ifB:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#12#$ff#0);
+    bSelfDef22:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#23#$0#0);
   end;
   //WriteLog(pchar('本次结束'+FormatDateTime('hh:nn:ss zzz',Now())));
 
@@ -550,8 +572,6 @@ begin
   DateTimePicker1.Time:=strtotime('00:00:00',fs);
   DateTimePicker2.Date:=now+7;
   DateTimePicker2.Time:=strtotime('23:59:59',fs);
-
-  //showmessage(datetimetostr(DateTimePicker1.DateTime)+'   '+datetimetostr(DateTimePicker2.DateTime));
 
   updateAdoQuery1;
 end;
@@ -717,15 +737,14 @@ begin
   ifSetActP:=false;
 
   ifLoadAdd:=false;
+  ifLoadAdd2:=false;
   ifLoadReduce:=false;
-  
+  ifLoadReduce2:=false;
+
   bSelfDef1:=false;
+  bSelfDef12:=false;
   bSelfDef2:=false;
-
-  ifA:=false;
-  ifB:=false;
-
-  //iProgressBar:=0;
+  bSelfDef22:=false;
 
   ADOQuery1.Connection:=dm.ADOConnection1;
   ADOQuery2.Connection:=dm.ADOConnection1;
@@ -820,7 +839,6 @@ var
 begin
   if not ADOQuery1.Active then exit;
   if ADOQuery1.RecordCount<=0 then exit;
-  //Timer1.Enabled:=true;
 
   ProgressBar1.Max:=WaitTime;
 
@@ -1129,20 +1147,6 @@ begin
   ADOQuery2.Delete;
 end;
 
-procedure TfrmMain.Timer1Timer(Sender: TObject);
-begin
-//  inc(iProgressBar);
-  
-//  ProgressBar1.Position:=iProgressBar;
-
-//  if iProgressBar=10 then
-//  begin
-//    (Sender as TTimer).Enabled:=false;
-//    iProgressBar:=0;
-//    if (MessageDlg('是否保存此次采集结果？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
-//  end;
-end;
-
 procedure TfrmMain.DateTimePicker1Change(Sender: TObject);
 begin
   updateAdoQuery1;
@@ -1153,34 +1157,52 @@ begin
   updateAdoQuery1;
 end;
 
-procedure TfrmMain.SpeedButton10Click(Sender: TObject);
+procedure TfrmMain.SpeedButton10MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   ifLoadAdd:=true;
 end;
 
-procedure TfrmMain.SpeedButton11Click(Sender: TObject);
+procedure TfrmMain.SpeedButton10MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  ifLoadAdd2:=true;
+end;
+
+procedure TfrmMain.SpeedButton11MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   ifLoadReduce:=true;
 end;
 
-procedure TfrmMain.SpeedButton12Click(Sender: TObject);
+procedure TfrmMain.SpeedButton11MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  ifLoadReduce2:=true;
+end;
+
+procedure TfrmMain.SpeedButton12MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   bSelfDef1:=true;
 end;
 
-procedure TfrmMain.SpeedButton13Click(Sender: TObject);
+procedure TfrmMain.SpeedButton12MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  bSelfDef12:=true;
+end;
+
+procedure TfrmMain.SpeedButton13MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   bSelfDef2:=true;
 end;
 
-procedure TfrmMain.SpeedButton14Click(Sender: TObject);
+procedure TfrmMain.SpeedButton13MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-  ifA:=true;
-end;
-
-procedure TfrmMain.SpeedButton15Click(Sender: TObject);
-begin
-  ifB:=true;
+  bSelfDef22:=true;
 end;
 
 end.

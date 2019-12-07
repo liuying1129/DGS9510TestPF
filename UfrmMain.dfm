@@ -541,7 +541,8 @@ object frmMain: TfrmMain
       Width = 60
       Height = 40
       Caption = #36127#36733'+'
-      OnClick = SpeedButton10Click
+      OnMouseDown = SpeedButton10MouseDown
+      OnMouseUp = SpeedButton10MouseUp
     end
     object SpeedButton11: TSpeedButton
       Left = 421
@@ -549,7 +550,8 @@ object frmMain: TfrmMain
       Width = 60
       Height = 40
       Caption = #36127#36733'-'
-      OnClick = SpeedButton11Click
+      OnMouseDown = SpeedButton11MouseDown
+      OnMouseUp = SpeedButton11MouseUp
     end
     object SpeedButton12: TSpeedButton
       Left = 360
@@ -557,7 +559,8 @@ object frmMain: TfrmMain
       Width = 60
       Height = 40
       Caption = #33258#23450#20041'1'
-      OnClick = SpeedButton12Click
+      OnMouseDown = SpeedButton12MouseDown
+      OnMouseUp = SpeedButton12MouseUp
     end
     object SpeedButton13: TSpeedButton
       Left = 421
@@ -565,23 +568,8 @@ object frmMain: TfrmMain
       Width = 60
       Height = 40
       Caption = #33258#23450#20041'2'
-      OnClick = SpeedButton13Click
-    end
-    object SpeedButton14: TSpeedButton
-      Left = 296
-      Top = 480
-      Width = 57
-      Height = 41
-      Caption = #36965#25511#33258#21160
-      OnClick = SpeedButton14Click
-    end
-    object SpeedButton15: TSpeedButton
-      Left = 296
-      Top = 528
-      Width = 57
-      Height = 41
-      Caption = #36965#25511#28040#38899
-      OnClick = SpeedButton15Click
+      OnMouseDown = SpeedButton13MouseDown
+      OnMouseUp = SpeedButton13MouseUp
     end
     object GroupBox1: TGroupBox
       Left = 10
@@ -1563,11 +1551,5 @@ object frmMain: TfrmMain
     Left = 313
     Top = 288
     ReportForm = {19000000}
-  end
-  object Timer1: TTimer
-    Enabled = False
-    OnTimer = Timer1Timer
-    Left = 390
-    Top = 504
   end
 end
