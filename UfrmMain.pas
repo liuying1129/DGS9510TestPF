@@ -153,6 +153,8 @@ type
     Panel37: TPanel;
     Panel38: TPanel;
     Panel39: TPanel;
+    SpeedButton14: TSpeedButton;
+    SpeedButton15: TSpeedButton;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -191,6 +193,8 @@ type
     procedure SpeedButton11Click(Sender: TObject);
     procedure SpeedButton12Click(Sender: TObject);
     procedure SpeedButton13Click(Sender: TObject);
+    procedure SpeedButton14Click(Sender: TObject);
+    procedure SpeedButton15Click(Sender: TObject);
   private
     { Private declarations }
     ifnewadd:boolean;
@@ -220,6 +224,8 @@ var
 
   bSelfDef1:boolean;
   bSelfDef2:boolean;
+
+  ifA,ifB:boolean;
 
   W_CT_Rate:integer;//CT变比
   W_U_Specified:integer;//额定电压
@@ -320,21 +326,20 @@ begin
     RrcDGS9510.OutA_V:=Decode2Byte(copy(RFM,46,2))/10;
     RrcDGS9510.OutA_W:=Decode2Byte(copy(RFM,48,2))/10;
 
-    RrcDGS9510.ActP_U:=Decode4Byte(copy(RFM,60,4));
-    RrcDGS9510.ActP_V:=Decode4Byte(copy(RFM,64,4));
-    RrcDGS9510.ActP_W:=Decode4Byte(copy(RFM,68,4));
-    RrcDGS9510.ActP_Total:=Decode4Byte(copy(RFM,72,4));
-    WriteLog(pchar('总有功功率4字节:'+copy(RFM,72,4)+' '+StrToHex(pchar(copy(RFM,72,4)))));
+    RrcDGS9510.ActP_U:=Decode4Byte(copy(RFM,60,4))/10;
+    RrcDGS9510.ActP_V:=Decode4Byte(copy(RFM,64,4))/10;
+    RrcDGS9510.ActP_W:=Decode4Byte(copy(RFM,68,4))/10;
+    RrcDGS9510.ActP_Total:=Decode4Byte(copy(RFM,72,4))/10;
 
-    RrcDGS9510.ReactP_U:=Decode4Byte(copy(RFM,76,4));
-    RrcDGS9510.ReactP_V:=Decode4Byte(copy(RFM,80,4));
-    RrcDGS9510.ReactP_W:=Decode4Byte(copy(RFM,84,4));
-    RrcDGS9510.ReactP_Total:=Decode4Byte(copy(RFM,88,4));
+    RrcDGS9510.ReactP_U:=Decode4Byte(copy(RFM,76,4))/10;
+    RrcDGS9510.ReactP_V:=Decode4Byte(copy(RFM,80,4))/10;
+    RrcDGS9510.ReactP_W:=Decode4Byte(copy(RFM,84,4))/10;
+    RrcDGS9510.ReactP_Total:=Decode4Byte(copy(RFM,88,4))/10;
 
-    RrcDGS9510.ApparentP_A:=Decode4Byte(copy(RFM,92,4));
-    RrcDGS9510.ApparentP_B:=Decode4Byte(copy(RFM,96,4));
-    RrcDGS9510.ApparentP_C:=Decode4Byte(copy(RFM,100,4));
-    RrcDGS9510.ApparentP_Total:=Decode4Byte(copy(RFM,104,4));
+    RrcDGS9510.ApparentP_A:=Decode4Byte(copy(RFM,92,4))/10;
+    RrcDGS9510.ApparentP_B:=Decode4Byte(copy(RFM,96,4))/10;
+    RrcDGS9510.ApparentP_C:=Decode4Byte(copy(RFM,100,4))/10;
+    RrcDGS9510.ApparentP_Total:=Decode4Byte(copy(RFM,104,4))/10;
 
     RrcDGS9510.PF_U:=Decode2Byte(copy(RFM,108,2))/100;
     RrcDGS9510.PF_V:=Decode2Byte(copy(RFM,110,2))/100;
@@ -420,27 +425,38 @@ begin
   if ifLoadAdd then//负载加
   begin
     ifLoadAdd:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$19#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#19#$ff#0);
   end;
 
   if ifLoadReduce then//负载减
   begin
     ifLoadReduce:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$20#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#20#$ff#0);
   end;
 
   if bSelfDef1 then//自定义输出1
   begin
     bSelfDef1:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$21#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#21#$ff#0);
   end;
 
   if bSelfDef2 then//自定义输出2
   begin
     bSelfDef2:=false;
-    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#$22#$ff#0);
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#22#$ff#0);
   end;
 
+  if ifA then//自定义输出1
+  begin
+    ifA:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#3#$ff#0);
+  end;
+
+  if ifB then//自定义输出2
+  begin
+    ifB:=false;
+    dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_SWITCH+#0#12#$ff#0);
+  end;
   //WriteLog(pchar('本次结束'+FormatDateTime('hh:nn:ss zzz',Now())));
 
   (Sender as TTimer).Enabled:=true;
@@ -705,6 +721,9 @@ begin
   
   bSelfDef1:=false;
   bSelfDef2:=false;
+
+  ifA:=false;
+  ifB:=false;
 
   //iProgressBar:=0;
 
@@ -1152,6 +1171,16 @@ end;
 procedure TfrmMain.SpeedButton13Click(Sender: TObject);
 begin
   bSelfDef2:=true;
+end;
+
+procedure TfrmMain.SpeedButton14Click(Sender: TObject);
+begin
+  ifA:=true;
+end;
+
+procedure TfrmMain.SpeedButton15Click(Sender: TObject);
+begin
+  ifB:=true;
 end;
 
 end.

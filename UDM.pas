@@ -93,7 +93,7 @@ begin
   result:=0;
   if length(s)<>4 then exit;
 
-  result:=ord(s[1])*16777216+ord(s[2])*65536+ord(s[3])*256+ord(s[4]);
+  result:=ord(s[3])*16777216+ord(s[4])*65536+ord(s[1])*256+ord(s[2]);
 end;
 
 FUNCTION Encode2Byte(w:word):STRING;

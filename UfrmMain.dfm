@@ -567,6 +567,22 @@ object frmMain: TfrmMain
       Caption = #33258#23450#20041'2'
       OnClick = SpeedButton13Click
     end
+    object SpeedButton14: TSpeedButton
+      Left = 296
+      Top = 480
+      Width = 57
+      Height = 41
+      Caption = #36965#25511#33258#21160
+      OnClick = SpeedButton14Click
+    end
+    object SpeedButton15: TSpeedButton
+      Left = 296
+      Top = 528
+      Width = 57
+      Height = 41
+      Caption = #36965#25511#28040#38899
+      OnClick = SpeedButton15Click
+    end
     object GroupBox1: TGroupBox
       Left = 10
       Top = 61
