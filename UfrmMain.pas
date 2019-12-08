@@ -46,7 +46,6 @@ type
     LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
     LabeledEdit3: TLabeledEdit;
-    LabeledEdit4: TLabeledEdit;
     LabeledEdit5: TLabeledEdit;
     BitBtn10: TBitBtn;
     BitBtn11: TBitBtn;
@@ -152,6 +151,9 @@ type
     Panel37: TPanel;
     Panel38: TPanel;
     Panel39: TPanel;
+    Label40: TLabel;
+    RadioButton2: TRadioButton;
+    RadioButton1: TRadioButton;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -201,6 +203,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure SpeedButton13MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure BitBtn10Click(Sender: TObject);
   private
     { Private declarations }
     ifnewadd:boolean;
@@ -224,6 +227,7 @@ var
   ifSetHZ:boolean;
   ifSetU:boolean;
   ifSetActP:boolean;
+  ifSetPF:boolean;
 
   ifLoadAdd,ifLoadAdd2:boolean;
   ifLoadReduce,ifLoadReduce2:boolean;
@@ -235,6 +239,7 @@ var
   W_U_Specified:integer;//额定电压
   F_HZ_Specified:Double;//额定频率
   W_ActP_Specified:integer;//额定功率
+  W_PF:Double;//代表功率因数的百分数
 
 {$R *.dfm}
 
@@ -287,6 +292,7 @@ begin
   Label33.Caption:=floattostr(RrcDGS9510.HZ_Specified);
   Label34.Caption:=inttostr(RrcDGS9510.U_Specified);
   Label32.Caption:=inttostr(RrcDGS9510.ActP_Specified);
+  Label30.Caption:=floattostr(RrcDGS9510.PF_SET)+'%';
 end;
 
 procedure TfrmMain.TimerGetDataTimer(Sender: TObject);
@@ -332,19 +338,19 @@ begin
     RrcDGS9510.ActP_V:=Decode4ByteNPN(copy(RFM,64,4))/10;
     RrcDGS9510.ActP_W:=Decode4ByteNPN(copy(RFM,68,4))/10;
     RrcDGS9510.ActP_Total:=Decode4ByteNPN(copy(RFM,72,4))/10;
-    WriteLog(pchar('有功字节1:'+inttostr(ord(RFM[72]))));
-    WriteLog(pchar('有功字节2:'+inttostr(ord(RFM[73]))));
-    WriteLog(pchar('有功字节3:'+inttostr(ord(RFM[74]))));
-    WriteLog(pchar('有功字节4:'+inttostr(ord(RFM[75]))));
+    //WriteLog(pchar('有功字节1:'+inttostr(ord(RFM[72]))));
+    //WriteLog(pchar('有功字节2:'+inttostr(ord(RFM[73]))));
+    //WriteLog(pchar('有功字节3:'+inttostr(ord(RFM[74]))));
+    //WriteLog(pchar('有功字节4:'+inttostr(ord(RFM[75]))));
 
     RrcDGS9510.ReactP_U:=Decode4ByteNPN(copy(RFM,76,4))/10;
     RrcDGS9510.ReactP_V:=Decode4ByteNPN(copy(RFM,80,4))/10;
     RrcDGS9510.ReactP_W:=Decode4ByteNPN(copy(RFM,84,4))/10;
     RrcDGS9510.ReactP_Total:=Decode4ByteNPN(copy(RFM,88,4))/10;
-    WriteLog(pchar('无功字节1:'+inttostr(ord(RFM[88]))));
-    WriteLog(pchar('无功字节2:'+inttostr(ord(RFM[89]))));
-    WriteLog(pchar('无功字节3:'+inttostr(ord(RFM[90]))));
-    WriteLog(pchar('无功字节4:'+inttostr(ord(RFM[91]))));
+    //WriteLog(pchar('无功字节1:'+inttostr(ord(RFM[88]))));
+    //WriteLog(pchar('无功字节2:'+inttostr(ord(RFM[89]))));
+    //WriteLog(pchar('无功字节3:'+inttostr(ord(RFM[90]))));
+    //WriteLog(pchar('无功字节4:'+inttostr(ord(RFM[91]))));
 
     RrcDGS9510.ApparentP_A:=Decode4ByteNPN(copy(RFM,92,4))/10;
     RrcDGS9510.ApparentP_B:=Decode4ByteNPN(copy(RFM,96,4))/10;
@@ -377,6 +383,11 @@ begin
       RrcDGS9510.HZ_Specified:=Decode2Byte(copy(RFM,4,2))/10;
     end;
 
+    if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_READ_REGISTER+#$11#2#0#1) then
+    begin
+      RrcDGS9510.PF_SET:=Decode2Byte(copy(RFM,4,2))/10;
+    end;
+
     if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_READ_REGISTER+#5#$16#0#1) then
     begin
       RrcDGS9510.U_Specified:=Decode2Byte(copy(RFM,4,2));
@@ -394,7 +405,7 @@ begin
     
     if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_REGISTER+#5#$78+Encode2Byte(W_CT_Rate)) then
     begin
-      showmessage('设置CT变比成功!');
+      MESSAGEDLG('设置CT变比成功!',mtInformation,[mbOK],0);
     end;
     ifReadParam:=true;
   end;
@@ -405,7 +416,7 @@ begin
     
     if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_REGISTER+#5#$16+Encode2Byte(W_U_Specified)) then
     begin
-      showmessage('设置额定电压成功!');
+      MESSAGEDLG('设置额定电压成功!',mtInformation,[mbOK],0);
     end;
     ifReadParam:=true;
   end;
@@ -416,7 +427,18 @@ begin
     
     if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_REGISTER+#5#$18+Encode2Byte(trunc(F_HZ_Specified*10))) then
     begin
-      showmessage('设置额定频率成功!');
+      MESSAGEDLG('设置额定频率成功!',mtInformation,[mbOK],0);
+    end;
+    ifReadParam:=true;
+  end;
+
+  if ifSetPF then
+  begin
+    ifSetPF:=false;
+    
+    if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_REGISTER+#$11#2+Encode2Byte(trunc(W_PF))) then
+    begin
+      MESSAGEDLG('设置功率因数成功!',mtInformation,[mbOK],0);
     end;
     ifReadParam:=true;
   end;
@@ -427,7 +449,7 @@ begin
     
     if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_REGISTER+#$11#9+Encode2Byte(W_ActP_Specified)) then
     begin
-      showmessage('设置额定功率成功!');
+      MESSAGEDLG('设置额定功率成功!',mtInformation,[mbOK],0);
     end;
     ifReadParam:=true;
   end;
@@ -489,7 +511,7 @@ procedure TfrmMain.BitBtn1Click(Sender: TObject);
 begin
   if not trystrtoint(trim(LabeledEdit5.Text),W_CT_Rate) then
   begin
-    showmessage('输入值无效!');
+    MESSAGEDLG('输入值无效!',mtError,[mbOK],0);
     exit;
   end;
 
@@ -501,11 +523,34 @@ procedure TfrmMain.BitBtn12Click(Sender: TObject);
 begin
   if not TryStrToFloatExt(pchar(trim(LabeledEdit2.Text)),F_HZ_Specified) then
   begin
-    showmessage('输入值无效!');
+    MESSAGEDLG('输入值无效!',mtError,[mbOK],0);
     exit;
   end;
 
   ifSetHZ:=true;
+end;
+
+procedure TfrmMain.BitBtn10Click(Sender: TObject);
+//写入功率因数
+begin
+  if RadioButton1.Checked then
+  begin
+    if RrcDGS9510.ActP_Total=0 then
+    begin
+      MESSAGEDLG('当前有功总功率为0,不能设置PF0.8!',mtError,[mbOK],0);
+      exit;
+    end;
+    W_PF:=RrcDGS9510.ActP_Total/1.31;
+  end else if RadioButton2.Checked then
+    begin
+      W_PF:=0;
+    end else
+      begin
+        MESSAGEDLG('请选择功率因数!',mtError,[mbOK],0);
+        exit;
+      end;
+
+  ifSetPF:=true;
 end;
 
 procedure TfrmMain.BitBtn13Click(Sender: TObject);
@@ -513,7 +558,7 @@ procedure TfrmMain.BitBtn13Click(Sender: TObject);
 begin
   if not trystrtoint(trim(LabeledEdit1.Text),W_U_Specified) then
   begin
-    showmessage('输入值无效!');
+    MESSAGEDLG('输入值无效!',mtError,[mbOK],0);
     exit;
   end;
 
@@ -525,7 +570,7 @@ procedure TfrmMain.BitBtn11Click(Sender: TObject);
 begin
   if not trystrtoint(trim(LabeledEdit3.Text),W_ActP_Specified) then
   begin
-    showmessage('输入值无效!');
+    MESSAGEDLG('输入值无效!',mtError,[mbOK],0);
     exit;
   end;
 
@@ -664,7 +709,7 @@ begin
     IF AdoQuery1.RecordCount=0 THEN
     BEGIN
       adotemp11.Free;
-      SHOWMESSAGE('没有记录供你修改，若要新增，请先点击"新增按钮"！');
+      MESSAGEDLG('没有记录供你修改，若要新增，请先点击"新增按钮"！',mtWarning,[mbOK],0);
       EXIT;
     END;
 
@@ -735,6 +780,7 @@ begin
   ifSetHZ:=false;
   ifSetU:=false;
   ifSetActP:=false;
+  ifSetPF:=false;
 
   ifLoadAdd:=false;
   ifLoadAdd2:=false;
@@ -959,7 +1005,7 @@ begin
 
   if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'DGS9510TestPF.frf') then
   begin
-    showmessage('加载打印模板DGS9510TestPF.frf失败');
+    MESSAGEDLG('加载打印模板DGS9510TestPF.frf失败！',mtError,[mbOK],0);
     exit;
   end;
   

@@ -229,9 +229,9 @@ object frmMain: TfrmMain
     end
     object GroupBox7: TGroupBox
       Left = 1
-      Top = 428
+      Top = 432
       Width = 247
-      Height = 153
+      Height = 149
       Align = alBottom
       Caption = #21442#25968#35774#32622
       Font.Charset = ANSI_CHARSET
@@ -243,42 +243,49 @@ object frmMain: TfrmMain
       TabOrder = 15
       object Label31: TLabel
         Left = 186
-        Top = 123
+        Top = 121
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
       object Label30: TLabel
         Left = 186
-        Top = 98
+        Top = 97
         Width = 52
         Height = 13
         Caption = #21151#29575#22240#25968
       end
       object Label32: TLabel
         Left = 186
-        Top = 74
+        Top = 72
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
       object Label33: TLabel
         Left = 186
-        Top = 50
+        Top = 48
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
       object Label34: TLabel
         Left = 186
-        Top = 26
+        Top = 24
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
+      object Label40: TLabel
+        Left = 17
+        Top = 97
+        Width = 52
+        Height = 13
+        Caption = #21151#29575#22240#25968
+      end
       object BitBtn1: TBitBtn
         Left = 147
-        Top = 119
+        Top = 117
         Width = 35
         Height = 21
         Caption = #35774#32622
@@ -287,7 +294,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit1: TLabeledEdit
         Left = 86
-        Top = 23
+        Top = 21
         Width = 60
         Height = 21
         EditLabel.Width = 73
@@ -298,7 +305,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit2: TLabeledEdit
         Left = 86
-        Top = 47
+        Top = 45
         Width = 60
         Height = 21
         EditLabel.Width = 80
@@ -309,7 +316,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit3: TLabeledEdit
         Left = 86
-        Top = 71
+        Top = 69
         Width = 60
         Height = 21
         EditLabel.Width = 80
@@ -318,62 +325,68 @@ object frmMain: TfrmMain
         LabelPosition = lpLeft
         TabOrder = 3
       end
-      object LabeledEdit4: TLabeledEdit
-        Left = 86
-        Top = 95
-        Width = 60
-        Height = 21
-        EditLabel.Width = 52
-        EditLabel.Height = 13
-        EditLabel.Caption = #21151#29575#22240#25968
-        LabelPosition = lpLeft
-        TabOrder = 4
-      end
       object LabeledEdit5: TLabeledEdit
         Left = 86
-        Top = 119
+        Top = 117
         Width = 60
         Height = 21
         EditLabel.Width = 68
         EditLabel.Height = 13
         EditLabel.Caption = 'CT'#21464#27604'(/5)'
         LabelPosition = lpLeft
-        TabOrder = 5
+        TabOrder = 4
       end
       object BitBtn10: TBitBtn
         Left = 147
-        Top = 95
+        Top = 93
+        Width = 35
+        Height = 21
+        Caption = #35774#32622
+        TabOrder = 5
+        OnClick = BitBtn10Click
+      end
+      object BitBtn11: TBitBtn
+        Left = 147
+        Top = 69
         Width = 35
         Height = 21
         Caption = #35774#32622
         TabOrder = 6
-      end
-      object BitBtn11: TBitBtn
-        Left = 147
-        Top = 71
-        Width = 35
-        Height = 21
-        Caption = #35774#32622
-        TabOrder = 7
         OnClick = BitBtn11Click
       end
       object BitBtn12: TBitBtn
         Left = 147
-        Top = 47
+        Top = 45
         Width = 35
         Height = 21
         Caption = #35774#32622
-        TabOrder = 8
+        TabOrder = 7
         OnClick = BitBtn12Click
       end
       object BitBtn13: TBitBtn
         Left = 147
-        Top = 23
+        Top = 21
         Width = 35
         Height = 21
         Caption = #35774#32622
-        TabOrder = 9
+        TabOrder = 8
         OnClick = BitBtn13Click
+      end
+      object RadioButton2: TRadioButton
+        Left = 120
+        Top = 95
+        Width = 23
+        Height = 17
+        Caption = '1'
+        TabOrder = 9
+      end
+      object RadioButton1: TRadioButton
+        Left = 74
+        Top = 95
+        Width = 38
+        Height = 17
+        Caption = '0.8'
+        TabOrder = 10
       end
     end
     object LabeledEdit19: TLabeledEdit
@@ -1182,7 +1195,7 @@ object frmMain: TfrmMain
       Top = 412
       Width = 530
       Height = 60
-      Caption = #30456#24207
+      Caption = #30456#24207'('#24230')'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
