@@ -239,7 +239,7 @@ var
   W_U_Specified:integer;//额定电压
   F_HZ_Specified:Double;//额定频率
   W_ActP_Specified:integer;//额定功率
-  W_PF:Double;//代表功率因数的百分数
+  W_PF:Word;//代表功率因数的百分数
 
 {$R *.dfm}
 
@@ -436,7 +436,7 @@ begin
   begin
     ifSetPF:=false;
     
-    if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_REGISTER+#$11#2+Encode2Byte(trunc(W_PF))) then
+    if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_WRITE_REGISTER+#$11#2+Encode2Byte(W_PF)) then
     begin
       MESSAGEDLG('设置功率因数成功!',mtInformation,[mbOK],0);
     end;
@@ -533,22 +533,12 @@ end;
 procedure TfrmMain.BitBtn10Click(Sender: TObject);
 //写入功率因数
 begin
-  if RadioButton1.Checked then
-  begin
-    if RrcDGS9510.ActP_Total=0 then
-    begin
-      MESSAGEDLG('当前有功总功率为0,不能设置PF0.8!',mtError,[mbOK],0);
-      exit;
-    end;
-    W_PF:=RrcDGS9510.ActP_Total/1.31;
-  end else if RadioButton2.Checked then
-    begin
-      W_PF:=0;
-    end else
-      begin
-        MESSAGEDLG('请选择功率因数!',mtError,[mbOK],0);
-        exit;
-      end;
+  if RadioButton1.Checked then W_PF:=763
+  else if RadioButton2.Checked then W_PF:=0
+  else begin
+    MESSAGEDLG('请选择功率因数!',mtError,[mbOK],0);
+    exit;
+  end;
 
   ifSetPF:=true;
 end;
