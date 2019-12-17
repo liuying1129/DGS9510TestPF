@@ -786,6 +786,8 @@ begin
 
   ADOQuery1.Connection:=dm.ADOConnection1;
   ADOQuery2.Connection:=dm.ADOConnection1;
+  
+  SetWindowLong(LabeledEdit3.Handle, GWL_STYLE, GetWindowLong(LabeledEdit3.Handle, GWL_STYLE) or ES_NUMBER);//只能输入数字
 end;
 
 procedure TfrmMain.ADOQuery1AfterOpen(DataSet: TDataSet);
