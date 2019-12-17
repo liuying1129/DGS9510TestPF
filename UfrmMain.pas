@@ -39,7 +39,6 @@ type
     GroupBox7: TGroupBox;
     Label31: TLabel;
     Label30: TLabel;
-    Label32: TLabel;
     Label33: TLabel;
     Label34: TLabel;
     BitBtn1: TBitBtn;
@@ -48,7 +47,6 @@ type
     LabeledEdit3: TLabeledEdit;
     LabeledEdit5: TLabeledEdit;
     BitBtn10: TBitBtn;
-    BitBtn11: TBitBtn;
     BitBtn12: TBitBtn;
     BitBtn13: TBitBtn;
     DBGrid2: TDBGrid;
@@ -226,7 +224,7 @@ var
   ifSetCT:boolean;
   ifSetHZ:boolean;
   ifSetU:boolean;
-  ifSetActP:boolean;
+  //ifSetActP:boolean;
   ifSetPF:boolean;
 
   ifLoadAdd,ifLoadAdd2:boolean;
@@ -238,12 +236,13 @@ var
   W_CT_Rate:integer;//CT变比
   W_U_Specified:integer;//额定电压
   F_HZ_Specified:Double;//额定频率
-  W_ActP_Specified:integer;//额定功率
   W_PF:Word;//代表功率因数的百分数
 
 {$R *.dfm}
 
 procedure TfrmMain.TimerRefreshShowTimer(Sender: TObject);
+var
+  W_ActP_Specified:integer;//额定功率
 begin
   Panel1.Caption:=inttostr(RrcDGS9510.OutU_UV);
   Panel2.Caption:=inttostr(RrcDGS9510.OutU_VW);
@@ -284,14 +283,15 @@ begin
   Panel26.Caption:=floattostr(RrcDGS9510.Exc_V);
   Panel27.Caption:=floattostr(RrcDGS9510.Exc_A);
 
-  if RrcDGS9510.ActP_Specified<>0 then
-    Panel28.Caption:=format('%.1f',[RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100]);
+  W_ActP_Specified:=strtointdef(trim(LabeledEdit3.Text),0);
+  if W_ActP_Specified<>0 then
+    Panel28.Caption:=format('%.1f',[RrcDGS9510.ActP_Total/W_ActP_Specified*100]);
     //Panel28.Caption:=floattostr(RrcDGS9510.ActP_Total/RrcDGS9510.ActP_Specified*100);
 
   Label31.Caption:=inttostr(RrcDGS9510.CT_Rate);
   Label33.Caption:=floattostr(RrcDGS9510.HZ_Specified);
   Label34.Caption:=inttostr(RrcDGS9510.U_Specified);
-  Label32.Caption:=inttostr(RrcDGS9510.ActP_Specified);
+  //Label32.Caption:=inttostr(RrcDGS9510.ActP_Specified);
   Label30.Caption:=floattostr(RrcDGS9510.PF_SET)+'%';
 end;
 
@@ -393,10 +393,10 @@ begin
       RrcDGS9510.U_Specified:=Decode2Byte(copy(RFM,4,2));
     end;
 
-    if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_READ_REGISTER+#$11#9#0#1) then
-    begin
-      RrcDGS9510.ActP_Specified:=Decode2Byte(copy(RFM,4,2));
-    end;
+    //if dm.SendDate(chr(Edit1.Value)+FUNC_CODE_READ_REGISTER+#$11#9#0#1) then
+    //begin
+    //  RrcDGS9510.ActP_Specified:=Decode2Byte(copy(RFM,4,2));
+    //end;
   end;
 
   if ifSetCT then
@@ -443,7 +443,7 @@ begin
     ifReadParam:=true;
   end;
 
-  if ifSetActP then
+  {if ifSetActP then
   begin
     ifSetActP:=false;
     
@@ -452,7 +452,7 @@ begin
       MESSAGEDLG('设置额定功率成功!',mtInformation,[mbOK],0);
     end;
     ifReadParam:=true;
-  end;
+  end;//}
 
   if ifLoadAdd then//负载加输出
   begin
@@ -558,13 +558,13 @@ end;
 procedure TfrmMain.BitBtn11Click(Sender: TObject);
 //写入额定功率
 begin
-  if not trystrtoint(trim(LabeledEdit3.Text),W_ActP_Specified) then
+{  if not trystrtoint(trim(LabeledEdit3.Text),W_ActP_Specified) then
   begin
     MESSAGEDLG('输入值无效!',mtError,[mbOK],0);
     exit;
   end;
 
-  ifSetActP:=true;
+  ifSetActP:=true;//}
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
@@ -575,6 +575,7 @@ begin
 
   ConfigIni.WriteString('Interface','COM',trim(cbCOMM.Text));
   configini.WriteInteger('Interface','ControllerAddr',edit1.Value);
+  configini.WriteString('Interface','ActP_Specified',LabeledEdit3.Text);
 
   configini.Free;
 end;
@@ -591,6 +592,7 @@ begin
   Panel29.Caption:=configini.ReadString('Interface','SysTitle','发电机智能测试系统');
   SpeedButton12.Caption:=configini.ReadString('Interface','SelfDefBtnCaption1','自定义1');
   SpeedButton13.Caption:=configini.ReadString('Interface','SelfDefBtnCaption2','自定义2');
+  LabeledEdit3.Text:=configini.ReadString('Interface','ActP_Specified','');
 
   configini.Free;
   
@@ -769,7 +771,7 @@ begin
   ifSetCT:=false;
   ifSetHZ:=false;
   ifSetU:=false;
-  ifSetActP:=false;
+  //ifSetActP:=false;
   ifSetPF:=false;
 
   ifLoadAdd:=false;
@@ -872,9 +874,13 @@ var
   i:integer;
 
   Save_Cursor:TCursor;
+
+  W_ActP_Specified:integer;
 begin
   if not ADOQuery1.Active then exit;
   if ADOQuery1.RecordCount<=0 then exit;
+
+  W_ActP_Specified:=strtointdef(trim(LabeledEdit3.Text),0);
 
   ProgressBar1.Max:=WaitTime;
 
@@ -927,7 +933,7 @@ begin
   adotemp11.Parameters.ParamByName('Exc_A').Value:=RrcDGS9510.Exc_A;
   adotemp11.Parameters.ParamByName('PS_HZ').Value:=RrcDGS9510.PS_HZ;
   adotemp11.Parameters.ParamByName('Operator').Value:=null;
-  adotemp11.Parameters.ParamByName('ActP_Specified').Value:=RrcDGS9510.ActP_Specified;
+  adotemp11.Parameters.ParamByName('ActP_Specified').Value:=W_ActP_Specified;//RrcDGS9510.ActP_Specified;
   adotemp11.Parameters.ParamByName('Collect_Type').Value:=(Sender as TSpeedButton).Caption;
   adotemp11.Parameters.ParamByName('PS_U').Value:=RrcDGS9510.PS_U;
   adotemp11.Parameters.ParamByName('PS_V').Value:=RrcDGS9510.PS_V;
@@ -1037,6 +1043,7 @@ var
 begin
     if parname='SysTitle' then ParValue:=Panel29.Caption;
 
+    if parname='Unid' then ParValue:=ADOQuery1.fieldbyname('测试号').AsString;
     if parname='BenchNo' then ParValue:=ADOQuery1.fieldbyname('实验台号').AsString;
     if parname='PartNo' then ParValue:=ADOQuery1.fieldbyname('物料号').AsString;
     if parname='OrderVolt' then ParValue:=ADOQuery1.fieldbyname('订单电压').AsString;

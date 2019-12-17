@@ -255,23 +255,16 @@ object frmMain: TfrmMain
         Height = 13
         Caption = #21151#29575#22240#25968
       end
-      object Label32: TLabel
+      object Label33: TLabel
         Left = 186
         Top = 72
         Width = 49
         Height = 13
         Caption = 'Label31'
       end
-      object Label33: TLabel
-        Left = 186
-        Top = 48
-        Width = 49
-        Height = 13
-        Caption = 'Label31'
-      end
       object Label34: TLabel
         Left = 186
-        Top = 24
+        Top = 48
         Width = 49
         Height = 13
         Caption = 'Label31'
@@ -294,7 +287,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit1: TLabeledEdit
         Left = 86
-        Top = 21
+        Top = 45
         Width = 60
         Height = 21
         EditLabel.Width = 73
@@ -305,7 +298,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit2: TLabeledEdit
         Left = 86
-        Top = 45
+        Top = 69
         Width = 60
         Height = 21
         EditLabel.Width = 80
@@ -316,7 +309,7 @@ object frmMain: TfrmMain
       end
       object LabeledEdit3: TLabeledEdit
         Left = 86
-        Top = 69
+        Top = 21
         Width = 60
         Height = 21
         EditLabel.Width = 80
@@ -345,31 +338,22 @@ object frmMain: TfrmMain
         TabOrder = 5
         OnClick = BitBtn10Click
       end
-      object BitBtn11: TBitBtn
+      object BitBtn12: TBitBtn
         Left = 147
         Top = 69
         Width = 35
         Height = 21
         Caption = #35774#32622
         TabOrder = 6
-        OnClick = BitBtn11Click
+        OnClick = BitBtn12Click
       end
-      object BitBtn12: TBitBtn
+      object BitBtn13: TBitBtn
         Left = 147
         Top = 45
         Width = 35
         Height = 21
         Caption = #35774#32622
         TabOrder = 7
-        OnClick = BitBtn12Click
-      end
-      object BitBtn13: TBitBtn
-        Left = 147
-        Top = 21
-        Width = 35
-        Height = 21
-        Caption = #35774#32622
-        TabOrder = 8
         OnClick = BitBtn13Click
       end
       object RadioButton2: TRadioButton
@@ -378,7 +362,7 @@ object frmMain: TfrmMain
         Width = 23
         Height = 17
         Caption = '1'
-        TabOrder = 9
+        TabOrder = 8
       end
       object RadioButton1: TRadioButton
         Left = 74
@@ -386,7 +370,7 @@ object frmMain: TfrmMain
         Width = 38
         Height = 17
         Caption = '0.8'
-        TabOrder = 10
+        TabOrder = 9
       end
     end
     object LabeledEdit19: TLabeledEdit

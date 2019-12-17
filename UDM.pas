@@ -31,7 +31,7 @@ TYPE
   CT_Rate:word;//CT变比
   HZ_Specified:Double;//额定频率
   U_Specified:word;//额定电压
-  ActP_Specified:word;//额定功率
+  //ActP_Specified:word;//额定功率
   PF_SET:Double;//功率因数
 END;
   
