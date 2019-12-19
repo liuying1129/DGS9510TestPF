@@ -151,6 +151,7 @@ type
     Label40: TLabel;
     RadioButton2: TRadioButton;
     RadioButton1: TRadioButton;
+    SpeedButton14: TSpeedButton;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -201,6 +202,7 @@ type
     procedure SpeedButton13MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure BitBtn10Click(Sender: TObject);
+    procedure SpeedButton14Click(Sender: TObject);
   private
     { Private declarations }
     ifnewadd:boolean;
@@ -215,9 +217,11 @@ var
 
 implementation
 
-uses UDM, UfrmLogin;
+uses UDM;
 
 var
+  bRegister:BOOLEAN;
+
   ifReadParam:boolean;
 
   ifSetCT:boolean;
@@ -296,6 +300,8 @@ end;
 
 procedure TfrmMain.TimerGetDataTimer(Sender: TObject);
 begin
+  if not bRegister then exit;
+  
   if not ComPort1.Connected then exit;
 
   (Sender as TTimer).Enabled:=false;
@@ -584,8 +590,8 @@ var
   configini:tinifile;
   fs:TFormatSettings;
 begin
-  frmLogin.ShowModal;
-  
+  if ifRegister then bRegister:=true else bRegister:=false;
+
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
   cbCOMM.Text:=ConfigIni.ReadString('Interface','COM','COM1');
@@ -1249,6 +1255,17 @@ procedure TfrmMain.SpeedButton13MouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   bSelfDef22:=true;
+end;
+
+procedure TfrmMain.SpeedButton14Click(Sender: TObject);
+var
+  ss:string;
+begin
+  ss:='RegisterNum'+#2+'Edit'+#2+#2+'0'+#2+'将该窗体标题栏上的字符串发给开发者,以获取注册码'+#2;
+  if bRegister then exit;
+  //函数返回的Pchar类型还真能直接赋值给string!!!
+  if ShowOptionForm(Pchar('注册:'+GetHDSn('C:\')+'-'+GetHDSn('D:\')),'Register',Pchar(ss),Pchar(ChangeFileExt(Application.ExeName,'.ini')))then
+    if ifRegister then bRegister:=true else bRegister:=false;
 end;
 
 end.

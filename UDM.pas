@@ -40,7 +40,7 @@ const
   FUNC_CODE_UNKNOW=#$04;
   FUNC_CODE_WRITE_SWITCH=#$05;
   FUNC_CODE_WRITE_REGISTER=#$06;
-    
+
 var
   DM: TDM;
 
@@ -48,7 +48,7 @@ var
   ifBusy:boolean;//已接收或超时才能发送下一条指令
   RFM:STRING;
   LisConn:string;
-  
+
 function CRC16(AStr:ShortString):ShortString;stdcall;external 'LYFunction.dll';
 procedure WriteLog(const ALogStr: Pchar);stdcall;external 'LYFunction.dll';
 FUNCTION Decode2Byte(S:STRING):Word;
@@ -62,6 +62,9 @@ function ShowOptionForm(const pCaption,pTabSheetCaption,pItemInfo,pInifile:Pchar
 function ExecSQLCmd(AConnectionString:string;ASQL:string):integer;
 function ScalarSQLCmd(AConnectionString:string;ASQL:string):string;
 function StrToHex(const ASourStr:Pchar):Pchar;stdcall;external 'LYFunction.dll';
+function GetHDSn(const RootPath:pchar):pchar;stdcall;external 'LYFunction.dll';
+function ifRegister:boolean;
+function EnCryptStr(aStr: Pchar; aKey: Pchar): Pchar;stdcall;external 'DESCrypt.dll';//加密
 
 
 implementation
@@ -292,6 +295,29 @@ begin
   Result:=Qry.Fields[0].AsString;
   Qry.Free;
   Conn.Free;
+end;
+
+function ifRegister:boolean;
+const
+  CryptStr='kb';//科斌
+var
+  HDSn,RegisterNum,EnHDSn:string;
+  configini:tinifile;
+  pEnHDSn:Pchar;
+begin
+  result:=false;
+  
+  HDSn:=GetHDSn('C:\')+'-'+GetHDSn('D:\');//函数返回的Pchar类型还真能直接赋值给string!!!
+
+  CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
+  RegisterNum:=CONFIGINI.ReadString('Register','RegisterNum','');
+  CONFIGINI.Free;
+  pEnHDSn:=EnCryptStr(Pchar(HDSn),Pchar(CryptStr));
+  EnHDSn:=StrPas(pEnHDSn);
+
+  if Uppercase(EnHDSn)=Uppercase(RegisterNum) then result:=true;
+
+  if not result then messagedlg('对不起,您没有注册或注册码错误,请注册!',mtinformation,[mbok],0);
 end;
 
 end.

@@ -1462,6 +1462,20 @@ object frmMain: TfrmMain
         ParentFont = False
         OnClick = SpeedButton7Click
       end
+      object SpeedButton14: TSpeedButton
+        Left = 102
+        Top = 2
+        Width = 36
+        Height = 36
+        Caption = #27880#20876
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = #23435#20307
+        Font.Style = []
+        ParentFont = False
+        OnClick = SpeedButton14Click
+      end
     end
   end
   object TimerRefreshShow: TTimer
