@@ -38,7 +38,6 @@ type
     DataSource2: TDataSource;
     GroupBox7: TGroupBox;
     Label31: TLabel;
-    Label30: TLabel;
     Label33: TLabel;
     Label34: TLabel;
     BitBtn1: TBitBtn;
@@ -216,7 +215,7 @@ var
 
 implementation
 
-uses UDM;
+uses UDM, UfrmLogin;
 
 var
   ifReadParam:boolean;
@@ -292,7 +291,7 @@ begin
   Label33.Caption:=floattostr(RrcDGS9510.HZ_Specified);
   Label34.Caption:=inttostr(RrcDGS9510.U_Specified);
   //Label32.Caption:=inttostr(RrcDGS9510.ActP_Specified);
-  Label30.Caption:=floattostr(RrcDGS9510.PF_SET)+'%';
+  //Label30.Caption:=floattostr(RrcDGS9510.PF_SET)+'%';
 end;
 
 procedure TfrmMain.TimerGetDataTimer(Sender: TObject);
@@ -585,6 +584,8 @@ var
   configini:tinifile;
   fs:TFormatSettings;
 begin
+  frmLogin.ShowModal;
+  
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
   cbCOMM.Text:=ConfigIni.ReadString('Interface','COM','COM1');

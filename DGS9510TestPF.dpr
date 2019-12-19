@@ -3,7 +3,8 @@ program DGS9510TestPF;
 uses
   Forms,
   UfrmMain in 'UfrmMain.pas' {frmMain},
-  UDM in 'UDM.pas' {DM: TDataModule};
+  UDM in 'UDM.pas' {DM: TDataModule},
+  UfrmLogin in 'UfrmLogin.pas' {frmLogin};
 
 {$R *.res}
 

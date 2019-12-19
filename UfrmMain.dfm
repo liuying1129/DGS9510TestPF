@@ -248,13 +248,6 @@ object frmMain: TfrmMain
         Height = 13
         Caption = 'Label31'
       end
-      object Label30: TLabel
-        Left = 186
-        Top = 97
-        Width = 52
-        Height = 13
-        Caption = #21151#29575#22240#25968
-      end
       object Label33: TLabel
         Left = 186
         Top = 72
