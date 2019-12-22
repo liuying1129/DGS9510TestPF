@@ -652,7 +652,7 @@ var
   sqlstr:string;
   Insert_Identity:integer;
   iOrderVolt,iHighPotTest:integer;
-  iOrderP,iExcStatorO,iMainStatorO,iOrderHZ:single;
+  iOrderP,iExcStatorO,iMainStatorO,iOrderHZ:double;
 begin
   adotemp11:=tadoquery.Create(nil);
   adotemp11.Connection:=DM.ADOConnection1;
@@ -712,7 +712,7 @@ begin
       EXIT;
     END;
 
-    Insert_Identity:=ADOQuery1.fieldbyname('Œ®“ª±‡∫≈').AsInteger;
+    Insert_Identity:=ADOQuery1.fieldbyname('≤‚ ‘∫≈').AsInteger;
     adotemp11.Close;
     adotemp11.SQL.Clear;
     adotemp11.SQL.Text:=' Update Test_Master  '+
@@ -751,7 +751,7 @@ begin
   end;
 
   adotemp11.Free;
-  AdoQuery1.Locate('Œ®“ª±‡∫≈',Insert_Identity,[loCaseInsensitive]) ;
+  AdoQuery1.Locate('≤‚ ‘∫≈',Insert_Identity,[loCaseInsensitive]) ;
   updateEdit;
 end;
 
