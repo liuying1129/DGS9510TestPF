@@ -1071,6 +1071,8 @@ begin
     if parname='TestDate' then ParValue:=ADOQuery1.fieldbyname('测试日期').AsString;
 
       //初始化，避免报表变量没有赋值时报错begin
+      if parname='PS_Conclusion' then ParValue:='';
+      
       if parname='OutU_UV_0' then ParValue:='';
       if parname='OutU_VW_0' then ParValue:='';
       if parname='OutU_WU_0' then ParValue:='';
@@ -1122,6 +1124,13 @@ begin
   begin
     if adotemp11.fieldbyname('采集类型').AsString='空载' then
     begin
+      if parname='PS_Conclusion' then
+      BEGIN
+        if (adotemp11.fieldbyname('相序V').AsFloat>adotemp11.fieldbyname('相序U').AsFloat) AND
+          (adotemp11.fieldbyname('相序V').AsFloat<adotemp11.fieldbyname('相序W').AsFloat) THEN
+        ParValue:='OK' ELSE ParValue:='BAD';
+      END;
+  
       if parname='OutU_UV_0' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
       if parname='OutU_VW_0' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
       if parname='OutU_WU_0' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
@@ -1179,13 +1188,6 @@ begin
     adotemp11.Next;
   end;
 
-  if parname='PS_Conclusion' then
-  BEGIN
-    if (adotemp11.fieldbyname('相序V').AsFloat>adotemp11.fieldbyname('相序U').AsFloat) AND
-      (adotemp11.fieldbyname('相序V').AsFloat<adotemp11.fieldbyname('相序W').AsFloat) THEN
-    ParValue:='OK' ELSE ParValue:='BAD';
-  END;
-  
   adotemp11.Free;
 end;
 
