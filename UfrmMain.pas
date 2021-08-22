@@ -152,6 +152,17 @@ type
     RadioButton2: TRadioButton;
     RadioButton1: TRadioButton;
     SpeedButton14: TSpeedButton;
+    SpeedButton15: TSpeedButton;
+    frReport2: TfrReport;
+    LabeledEdit4: TLabeledEdit;
+    LabeledEdit20: TLabeledEdit;
+    LabeledEdit21: TLabeledEdit;
+    LabeledEdit22: TLabeledEdit;
+    LabeledEdit23: TLabeledEdit;
+    LabeledEdit24: TLabeledEdit;
+    LabeledEdit25: TLabeledEdit;
+    LabeledEdit26: TLabeledEdit;
+    LabeledEdit27: TLabeledEdit;
     procedure TimerRefreshShowTimer(Sender: TObject);
     procedure TimerGetDataTimer(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -203,6 +214,9 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure BitBtn10Click(Sender: TObject);
     procedure SpeedButton14Click(Sender: TObject);
+    procedure SpeedButton15Click(Sender: TObject);
+    procedure frReport2GetValue(const ParName: String;
+      var ParValue: Variant);
   private
     { Private declarations }
     ifnewadd:boolean;
@@ -651,8 +665,8 @@ var
   adotemp11,adotemp22:tadoquery;
   sqlstr:string;
   Insert_Identity:integer;
-  iOrderVolt,iHighPotTest:integer;
-  iOrderP,iExcStatorO,iMainStatorO,iOrderHZ:double;
+  iOrderVolt,iHighPotTest,iPhaseNum,iOrderRPM,iHighPotTest_Rotor:integer;
+  iOrderP,iExcStatorO,iMainStatorO,iOrderHZ,iOrderA,iOrderPF,iEnvTemp:double;
 begin
   adotemp11:=tadoquery.Create(nil);
   adotemp11.Connection:=DM.ADOConnection1;
@@ -661,8 +675,10 @@ begin
     ifNewAdd:=false;
 
     sqlstr:='Insert into Test_Master ('+
-                        ' BenchNo, PartNo, OrderVolt, Model, SerialNo, OrderP, ExcStatorO, MainStatorO, OrderHZ, Remark, HighPotTest, AVRModel, AVRNo, Tester,TestDate) values ('+
-                        ':BenchNo,:PartNo,:OrderVolt,:Model,:SerialNo,:OrderP,:ExcStatorO,:MainStatorO,:OrderHZ,:Remark,:HighPotTest,:AVRModel,:AVRNo,:Tester,Now()); ';
+                        ' BenchNo, PartNo, OrderVolt, Model, SerialNo, OrderP, ExcStatorO, MainStatorO, OrderHZ, Remark, HighPotTest, AVRModel, AVRNo, Tester,TestDate,OrderA, OrderPF, PhaseNum, OrderRPM, WorkSystem, InsulationLevel, ProtectionLevel, EnvTemp,'+
+                        ' HighPotTest_Rotor) values ('+
+                        ':BenchNo,:PartNo,:OrderVolt,:Model,:SerialNo,:OrderP,:ExcStatorO,:MainStatorO,:OrderHZ,:Remark,:HighPotTest,:AVRModel,:AVRNo,:Tester,Now(),  :OrderA,:OrderPF,:PhaseNum,:OrderRPM,:WorkSystem,:InsulationLevel,:ProtectionLevel,:EnvTemp,'+
+                        ':HighPotTest_Rotor); ';
     adotemp11.Close;
     adotemp11.SQL.Clear;
     adotemp11.SQL.Add(sqlstr);
@@ -692,6 +708,29 @@ begin
     adotemp11.Parameters.ParamByName('AVRModel').Value:=trim(LabeledEdit17.Text);
     adotemp11.Parameters.ParamByName('AVRNo').Value:=trim(LabeledEdit18.Text);
     adotemp11.Parameters.ParamByName('Tester').Value:=trim(LabeledEdit19.Text);
+
+    if trystrtofloat(LabeledEdit4.Text,iOrderA) then
+      adotemp11.Parameters.ParamByName('OrderA').Value:=iOrderA
+    else adotemp11.Parameters.ParamByName('OrderA').Value:=null;
+    if trystrtofloat(LabeledEdit20.Text,iOrderPF) then
+      adotemp11.Parameters.ParamByName('OrderPF').Value:=iOrderPF
+    else adotemp11.Parameters.ParamByName('OrderPF').Value:=null;
+    if trystrtoint(LabeledEdit21.Text,iPhaseNum) then
+      adotemp11.Parameters.ParamByName('PhaseNum').Value:=iPhaseNum
+    else adotemp11.Parameters.ParamByName('PhaseNum').Value:=null;
+    if trystrtoint(LabeledEdit22.Text,iOrderRPM) then
+      adotemp11.Parameters.ParamByName('OrderRPM').Value:=iOrderRPM
+    else adotemp11.Parameters.ParamByName('OrderRPM').Value:=null;
+    adotemp11.Parameters.ParamByName('WorkSystem').Value:=trim(LabeledEdit23.Text);
+    adotemp11.Parameters.ParamByName('InsulationLevel').Value:=trim(LabeledEdit24.Text);
+    adotemp11.Parameters.ParamByName('ProtectionLevel').Value:=trim(LabeledEdit25.Text);
+    if trystrtofloat(LabeledEdit26.Text,iEnvTemp) then
+      adotemp11.Parameters.ParamByName('EnvTemp').Value:=iEnvTemp
+    else adotemp11.Parameters.ParamByName('EnvTemp').Value:=null;
+    if trystrtoint(LabeledEdit27.Text,iHighPotTest_Rotor) then
+      adotemp11.Parameters.ParamByName('HighPotTest_Rotor').Value:=iHighPotTest_Rotor
+    else adotemp11.Parameters.ParamByName('HighPotTest_Rotor').Value:=null;
+  
     adotemp11.ExecSQL;
     ADOQuery1.Requery([]);
 
@@ -717,7 +756,8 @@ begin
     adotemp11.SQL.Clear;
     adotemp11.SQL.Text:=' Update Test_Master  '+
     '  set BenchNo=:BenchNo,PartNo=:PartNo,OrderVolt=:OrderVolt,Model=:Model,SerialNo=:SerialNo,OrderP=:OrderP,'+
-    '  ExcStatorO=:ExcStatorO,MainStatorO=:MainStatorO,OrderHZ=:OrderHZ,Remark=:Remark,HighPotTest=:HighPotTest,AVRModel=:AVRModel,AVRNo=:AVRNo,Tester=:Tester '+
+    '  ExcStatorO=:ExcStatorO,MainStatorO=:MainStatorO,OrderHZ=:OrderHZ,Remark=:Remark,HighPotTest=:HighPotTest,AVRModel=:AVRModel,AVRNo=:AVRNo,Tester=:Tester,'+
+    '  OrderA=:OrderA,OrderPF=:OrderPF,PhaseNum=:PhaseNum,OrderRPM=:OrderRPM,WorkSystem=:WorkSystem,InsulationLevel=:InsulationLevel,ProtectionLevel=:ProtectionLevel,EnvTemp=:EnvTemp,HighPotTest_Rotor=:HighPotTest_Rotor '+
     '  Where    Unid=:Unid  ';
     adotemp11.Parameters.ParamByName('BenchNo').Value:=trim(LabeledEdit6.Text);
     adotemp11.Parameters.ParamByName('PartNo').Value:=trim(LabeledEdit7.Text);
@@ -746,6 +786,29 @@ begin
     adotemp11.Parameters.ParamByName('AVRNo').Value:=trim(LabeledEdit18.Text);
     adotemp11.Parameters.ParamByName('Tester').Value:=trim(LabeledEdit19.Text);
     adotemp11.Parameters.ParamByName('Unid').Value:=Insert_Identity;
+
+    if trystrtofloat(LabeledEdit4.Text,iOrderA) then
+      adotemp11.Parameters.ParamByName('OrderA').Value:=iOrderA
+    else adotemp11.Parameters.ParamByName('OrderA').Value:=null;
+    if trystrtofloat(LabeledEdit20.Text,iOrderPF) then
+      adotemp11.Parameters.ParamByName('OrderPF').Value:=iOrderPF
+    else adotemp11.Parameters.ParamByName('OrderPF').Value:=null;
+    if trystrtoint(LabeledEdit21.Text,iPhaseNum) then
+      adotemp11.Parameters.ParamByName('PhaseNum').Value:=iPhaseNum
+    else adotemp11.Parameters.ParamByName('PhaseNum').Value:=null;
+    if trystrtoint(LabeledEdit22.Text,iOrderRPM) then
+      adotemp11.Parameters.ParamByName('OrderRPM').Value:=iOrderRPM
+    else adotemp11.Parameters.ParamByName('OrderRPM').Value:=null;
+    adotemp11.Parameters.ParamByName('WorkSystem').Value:=trim(LabeledEdit23.Text);
+    adotemp11.Parameters.ParamByName('InsulationLevel').Value:=trim(LabeledEdit24.Text);
+    adotemp11.Parameters.ParamByName('ProtectionLevel').Value:=trim(LabeledEdit25.Text);
+    if trystrtofloat(LabeledEdit26.Text,iEnvTemp) then
+      adotemp11.Parameters.ParamByName('EnvTemp').Value:=iEnvTemp
+    else adotemp11.Parameters.ParamByName('EnvTemp').Value:=null;
+    if trystrtoint(LabeledEdit27.Text,iHighPotTest_Rotor) then
+      adotemp11.Parameters.ParamByName('HighPotTest_Rotor').Value:=iHighPotTest_Rotor
+    else adotemp11.Parameters.ParamByName('HighPotTest_Rotor').Value:=null;
+    
     adotemp11.ExecSQL;
     AdoQuery1.Refresh;
   end;
@@ -763,7 +826,9 @@ begin
   adoquery1.SQL.Text:='select Unid as 测试号,Create_Time as 创建时间,BenchNo as 实验台号,PartNo as 物料号,OrderVolt as 订单电压,Model as 型号,SerialNo as 序列号,'+
                       'OrderP as 订单功率,ExcStatorO as 励磁定子电阻,MainStatorO as 主定子电阻,OrderHZ as 订单频率,Remark as 备注,'+
                       'HighPotTest as 高压测试,AVRModel as AVR型号,AVRNo as AVR编号,Tester as 测试者,TestDate as 测试日期,'+
-                      'Auditor as 审核者,Audit_Date as 审核时间 from Test_Master '+
+                      'Auditor as 审核者,Audit_Date as 审核时间,'+
+                      'OrderA as 相电流,OrderPF as 功率因数,PhaseNum as 相数,OrderRPM as 额定转速,WorkSystem as 工作制,InsulationLevel as 绝缘等级,ProtectionLevel as 防护等级,EnvTemp as 环境温度,HighPotTest_Rotor as 高压测试转子 '+
+                      ' from Test_Master '+
                       ' where Create_Time between :Create_Time_Start and :Create_Time_Stop ';
                       
   adoquery1.Parameters.ParamByName('Create_Time_Start').Value:=DateTimePicker1.DateTime;
@@ -795,6 +860,8 @@ begin
   ADOQuery2.Connection:=dm.ADOConnection1;
   
   SetWindowLong(LabeledEdit3.Handle, GWL_STYLE, GetWindowLong(LabeledEdit3.Handle, GWL_STYLE) or ES_NUMBER);//只能输入数字
+  SetWindowLong(LabeledEdit21.Handle, GWL_STYLE, GetWindowLong(LabeledEdit21.Handle, GWL_STYLE) or ES_NUMBER);//只能输入数字
+  SetWindowLong(LabeledEdit22.Handle, GWL_STYLE, GetWindowLong(LabeledEdit22.Handle, GWL_STYLE) or ES_NUMBER);//只能输入数字
 end;
 
 procedure TfrmMain.ADOQuery1AfterOpen(DataSet: TDataSet);
@@ -834,6 +901,16 @@ begin
     LabeledEdit16.Text:=adoquery1.fieldbyname('高压测试').AsString;
     LabeledEdit17.Text:=adoquery1.fieldbyname('AVR型号').AsString;
     LabeledEdit18.Text:=adoquery1.fieldbyname('AVR编号').AsString;
+
+    labelededit4.Text:=adoquery1.fieldbyname('相电流').AsString;
+    labelededit20.Text:=adoquery1.fieldbyname('功率因数').AsString;
+    labelededit21.Text:=adoquery1.fieldbyname('相数').AsString;
+    labelededit22.Text:=adoquery1.fieldbyname('额定转速').AsString;
+    labelededit23.Text:=adoquery1.fieldbyname('工作制').AsString;
+    labelededit24.Text:=adoquery1.fieldbyname('绝缘等级').AsString;
+    labelededit25.Text:=adoquery1.fieldbyname('防护等级').AsString;
+    labelededit26.Text:=adoquery1.fieldbyname('环境温度').AsString;
+    labelededit27.Text:=adoquery1.fieldbyname('高压测试转子').AsString;
   end else
   begin
     ClearEdit;
@@ -856,6 +933,16 @@ begin
   labelededit17.Clear;
   labelededit18.Clear;
   labelededit19.Clear;
+
+  labelededit4.Clear;
+  labelededit20.Clear;
+  labelededit21.Clear;
+  labelededit22.Clear;
+  labelededit23.Clear;
+  labelededit24.Clear;
+  labelededit25.Clear;
+  labelededit26.Clear;
+  labelededit27.Clear;
 end;
 
 procedure TfrmMain.BitBtn7Click(Sender: TObject);
@@ -1268,6 +1355,180 @@ begin
   //函数返回的Pchar类型还真能直接赋值给string!!!
   if ShowOptionForm(Pchar('注册:'+GetHDSn('C:\')+'-'+GetHDSn('D:\')),'Register',Pchar(ss),Pchar(ChangeFileExt(Application.ExeName,'.ini')))then
     if ifRegister then bRegister:=true else bRegister:=false;
+end;
+
+procedure TfrmMain.SpeedButton15Click(Sender: TObject);
+begin
+  if not ADOQuery1.Active then exit;
+  if ADOQuery1.RecordCount<=0 then exit;
+  
+  if not ADOQuery2.Active then exit;
+  if ADOQuery2.RecordCount<=0 then exit;
+
+  if not frReport2.LoadFromFile(ExtractFilePath(application.ExeName)+'DGS9510TestPF-kwise.frf') then
+  begin
+    MESSAGEDLG('加载打印模板DGS9510TestPF-kwise.frf失败！',mtError,[mbOK],0);
+    exit;
+  end;
+  
+  frReport2.ShowPrintDialog:=true;
+  frReport2.ShowReport;
+end;
+
+procedure TfrmMain.frReport2GetValue(const ParName: String;
+  var ParValue: Variant);
+var
+  adotemp11:tadoquery;
+begin
+    if parname='SysTitle' then ParValue:=Panel29.Caption;
+
+    if parname='Unid' then ParValue:=ADOQuery1.fieldbyname('测试号').AsString;
+    if parname='BenchNo' then ParValue:=ADOQuery1.fieldbyname('实验台号').AsString;
+    if parname='PartNo' then ParValue:=ADOQuery1.fieldbyname('物料号').AsString;
+    if parname='OrderVolt' then ParValue:=ADOQuery1.fieldbyname('订单电压').AsString;
+    if parname='Model' then ParValue:=ADOQuery1.fieldbyname('型号').AsString;
+    if parname='SerialNo' then ParValue:=ADOQuery1.fieldbyname('序列号').AsString;
+    if parname='OrderP' then ParValue:=ADOQuery1.fieldbyname('订单功率').AsString;
+    if parname='ExcStatorO' then ParValue:=ADOQuery1.fieldbyname('励磁定子电阻').AsString;
+    if parname='MainStatorO' then ParValue:=ADOQuery1.fieldbyname('主定子电阻').AsString;
+    if parname='OrderHZ' then ParValue:=ADOQuery1.fieldbyname('订单频率').AsString;
+
+    if parname='Remark' then ParValue:=ADOQuery1.fieldbyname('备注').AsString;
+    if parname='HighPotTest' then ParValue:=ADOQuery1.fieldbyname('高压测试').AsString;
+    if parname='AVRModel' then ParValue:=ADOQuery1.fieldbyname('AVR型号').AsString;
+    if parname='AVRNo' then ParValue:=ADOQuery1.fieldbyname('AVR编号').AsString;
+    if parname='Tester' then ParValue:=ADOQuery1.fieldbyname('测试者').AsString;
+    if parname='TestDate' then ParValue:=ADOQuery1.fieldbyname('测试日期').AsString;
+
+    if parname='WorkSystem' then ParValue:=ADOQuery1.fieldbyname('工作制').AsString;
+    if parname='OrderA' then ParValue:=ADOQuery1.fieldbyname('相电流').AsString;
+    if parname='OrderPF' then ParValue:=ADOQuery1.fieldbyname('功率因数').AsString;
+    if parname='PhaseNum' then ParValue:=ADOQuery1.fieldbyname('相数').AsString;
+    if parname='OrderRPM' then ParValue:=ADOQuery1.fieldbyname('额定转速').AsString;
+    if parname='InsulationLevel' then ParValue:=ADOQuery1.fieldbyname('绝缘等级').AsString;
+    if parname='ProtectionLevel' then ParValue:=ADOQuery1.fieldbyname('防护等级').AsString;
+    if parname='EnvTemp' then ParValue:=ADOQuery1.fieldbyname('环境温度').AsString;
+    if parname='HighPotTest_Rotor' then ParValue:=ADOQuery1.fieldbyname('高压测试转子').AsString;
+
+      //初始化，避免报表变量没有赋值时报错begin
+      if parname='PS_Conclusion' then ParValue:='';
+      
+      if parname='OutU_UV_0' then ParValue:='';
+      if parname='OutU_VW_0' then ParValue:='';
+      if parname='OutU_WU_0' then ParValue:='';
+      //if parname='OutA_U_0' then ParValue:='';
+      //if parname='ActP_Total_0' then ParValue:='';
+      //if parname='ReactP_Total_0' then ParValue:='';
+      //if parname='PF_Avg_0' then ParValue:='';
+      if parname='Exc_V_0' then ParValue:='';
+      if parname='Exc_A_0' then ParValue:='';
+      if parname='PS_HZ_0' then ParValue:='';
+
+      if parname='OutU_UV_1' then ParValue:='';
+      if parname='OutU_VW_1' then ParValue:='';
+      if parname='OutU_WU_1' then ParValue:='';
+      if parname='OutA_U_1' then ParValue:='';
+      if parname='ActP_Total_1' then ParValue:='';
+      if parname='ApparentP_Total_1' then ParValue:='';
+      if parname='PF_Avg_1' then ParValue:='';
+      if parname='Exc_V_1' then ParValue:='';
+      if parname='Exc_A_1' then ParValue:='';
+      if parname='PS_HZ_1' then ParValue:='';
+
+      if parname='OutU_UV_2' then ParValue:='';
+      if parname='OutU_VW_2' then ParValue:='';
+      if parname='OutU_WU_2' then ParValue:='';
+      if parname='OutA_U_2' then ParValue:='';
+      if parname='ActP_Total_2' then ParValue:='';
+      if parname='ApparentP_Total_2' then ParValue:='';
+      if parname='PF_Avg_2' then ParValue:='';
+      if parname='Exc_V_2' then ParValue:='';
+      if parname='Exc_A_2' then ParValue:='';
+      if parname='PS_HZ_2' then ParValue:='';
+
+      if parname='OutU_UV_3' then ParValue:='';
+      if parname='OutU_VW_3' then ParValue:='';
+      if parname='OutU_WU_3' then ParValue:='';
+      if parname='OutA_U_3' then ParValue:='';
+      //if parname='ActP_Total_3' then ParValue:='';
+      //if parname='ReactP_Total_3' then ParValue:='';
+      //if parname='PF_Avg_3' then ParValue:='';
+      //if parname='Exc_V_3' then ParValue:='';
+      //if parname='Exc_A_3' then ParValue:='';
+      if parname='PS_HZ_3' then ParValue:='';
+      //初始化，避免报表变量没有赋值时报错end
+
+  adotemp11:=tadoquery.Create(nil);
+  adotemp11.clone(ADOQuery2);
+  while not adotemp11.Eof do
+  begin
+    if adotemp11.fieldbyname('采集类型').AsString='空载' then
+    begin
+      if parname='PS_Conclusion' then
+      BEGIN
+        if (adotemp11.fieldbyname('相序V').AsFloat>adotemp11.fieldbyname('相序U').AsFloat) AND
+          (adotemp11.fieldbyname('相序V').AsFloat<adotemp11.fieldbyname('相序W').AsFloat) THEN
+        ParValue:='OK' ELSE ParValue:='BAD';
+      END;
+  
+      if parname='OutU_UV_0' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
+      if parname='OutU_VW_0' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
+      if parname='OutU_WU_0' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
+      //if parname='OutA_U_0' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
+      //if parname='ActP_Total_0' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
+      //if parname='ReactP_Total_0' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
+      //if parname='PF_Avg_0' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
+      if parname='Exc_V_0' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
+      if parname='Exc_A_0' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
+      if parname='PS_HZ_0' then ParValue:=adotemp11.fieldbyname('频率').AsString;
+    end;
+
+    if adotemp11.fieldbyname('采集类型').AsString='带载PF0.8' then
+    begin
+      if parname='OutU_UV_1' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
+      if parname='OutU_VW_1' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
+      if parname='OutU_WU_1' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
+      if parname='OutA_U_1' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
+      if parname='ActP_Total_1' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
+      if parname='ApparentP_Total_1' then ParValue:=adotemp11.fieldbyname('总视在功率').AsString;
+      if parname='PF_Avg_1' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
+      if parname='Exc_V_1' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
+      if parname='Exc_A_1' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
+      if parname='PS_HZ_1' then ParValue:=adotemp11.fieldbyname('频率').AsString;
+    end;
+
+    if adotemp11.fieldbyname('采集类型').AsString='带载PF1.0' then
+    begin
+      if parname='OutU_UV_2' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
+      if parname='OutU_VW_2' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
+      if parname='OutU_WU_2' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
+      if parname='OutA_U_2' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
+      if parname='ActP_Total_2' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
+      if parname='ApparentP_Total_2' then ParValue:=adotemp11.fieldbyname('总视在功率').AsString;
+      if parname='PF_Avg_2' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
+      if parname='Exc_V_2' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
+      if parname='Exc_A_2' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
+      if parname='PS_HZ_2' then ParValue:=adotemp11.fieldbyname('频率').AsString;
+    end;
+
+    if adotemp11.fieldbyname('采集类型').AsString='剩磁电压' then
+    begin
+      if parname='OutU_UV_3' then ParValue:=adotemp11.fieldbyname('线电压UV').AsString;
+      if parname='OutU_VW_3' then ParValue:=adotemp11.fieldbyname('线电压VW').AsString;
+      if parname='OutU_WU_3' then ParValue:=adotemp11.fieldbyname('线电压WU').AsString;
+      //if parname='OutA_U_3' then ParValue:=adotemp11.fieldbyname('电流U').AsString;
+      //if parname='ActP_Total_3' then ParValue:=adotemp11.fieldbyname('总有功功率').AsString;
+      //if parname='ReactP_Total_3' then ParValue:=adotemp11.fieldbyname('总无功功率').AsString;
+      //if parname='PF_Avg_3' then ParValue:=adotemp11.fieldbyname('平均功率因数').AsString;
+      //if parname='Exc_V_3' then ParValue:=adotemp11.fieldbyname('励磁电压').AsString;
+      //if parname='Exc_A_3' then ParValue:=adotemp11.fieldbyname('励磁电流').AsString;
+      if parname='PS_HZ_3' then ParValue:=adotemp11.fieldbyname('频率').AsString;
+    end;
+
+    adotemp11.Next;
+  end;
+
+  adotemp11.Free;
 end;
 
 end.

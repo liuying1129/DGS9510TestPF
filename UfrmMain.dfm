@@ -46,13 +46,13 @@ object frmMain: TfrmMain
   object Panel30: TPanel
     Left = 0
     Top = 40
-    Width = 249
+    Width = 341
     Height = 582
     Align = alLeft
     Color = 16767438
     TabOrder = 1
     object SpeedButton1: TSpeedButton
-      Left = 176
+      Left = 248
       Top = 2
       Width = 70
       Height = 40
@@ -60,7 +60,7 @@ object frmMain: TfrmMain
       OnClick = BitBtn6Click
     end
     object SpeedButton2: TSpeedButton
-      Left = 176
+      Left = 248
       Top = 82
       Width = 70
       Height = 40
@@ -68,15 +68,23 @@ object frmMain: TfrmMain
       OnClick = BitBtn7Click
     end
     object SpeedButton6: TSpeedButton
-      Left = 176
-      Top = 285
+      Left = 248
+      Top = 140
       Width = 70
       Height = 40
-      Caption = #25171#21360
+      Caption = #25171#21360#26684#24335'1'
       OnClick = SpeedButton6Click
     end
+    object SpeedButton15: TSpeedButton
+      Left = 248
+      Top = 180
+      Width = 70
+      Height = 40
+      Caption = #25171#21360#26684#24335'2'
+      OnClick = SpeedButton15Click
+    end
     object LabeledEdit6: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 3
       Width = 90
       Height = 21
@@ -87,18 +95,18 @@ object frmMain: TfrmMain
       TabOrder = 0
     end
     object LabeledEdit7: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 26
       Width = 90
       Height = 21
-      EditLabel.Width = 39
+      EditLabel.Width = 98
       EditLabel.Height = 13
-      EditLabel.Caption = #29289#26009#21495
+      EditLabel.Caption = #29289#26009'/'#21457#30005#26426#32534#21495
       LabelPosition = lpLeft
       TabOrder = 1
     end
     object LabeledEdit8: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 49
       Width = 90
       Height = 21
@@ -109,7 +117,7 @@ object frmMain: TfrmMain
       TabOrder = 2
     end
     object LabeledEdit9: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 72
       Width = 90
       Height = 21
@@ -120,7 +128,7 @@ object frmMain: TfrmMain
       TabOrder = 3
     end
     object LabeledEdit10: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 95
       Width = 90
       Height = 21
@@ -131,7 +139,7 @@ object frmMain: TfrmMain
       TabOrder = 4
     end
     object LabeledEdit11: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 119
       Width = 90
       Height = 21
@@ -142,7 +150,7 @@ object frmMain: TfrmMain
       TabOrder = 5
     end
     object LabeledEdit12: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 142
       Width = 90
       Height = 21
@@ -153,7 +161,7 @@ object frmMain: TfrmMain
       TabOrder = 6
     end
     object LabeledEdit13: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 165
       Width = 90
       Height = 21
@@ -164,7 +172,7 @@ object frmMain: TfrmMain
       TabOrder = 7
     end
     object LabeledEdit14: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 188
       Width = 90
       Height = 21
@@ -175,7 +183,7 @@ object frmMain: TfrmMain
       TabOrder = 8
     end
     object LabeledEdit15: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 212
       Width = 90
       Height = 21
@@ -186,18 +194,18 @@ object frmMain: TfrmMain
       TabOrder = 9
     end
     object LabeledEdit16: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 235
       Width = 90
       Height = 21
-      EditLabel.Width = 52
+      EditLabel.Width = 85
       EditLabel.Height = 13
-      EditLabel.Caption = #39640#21387#27979#35797
+      EditLabel.Caption = #39640#21387#27979#35797'.'#23450#23376
       LabelPosition = lpLeft
       TabOrder = 10
     end
     object LabeledEdit17: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 258
       Width = 90
       Height = 21
@@ -205,10 +213,10 @@ object frmMain: TfrmMain
       EditLabel.Height = 13
       EditLabel.Caption = 'AVR'#22411#21495
       LabelPosition = lpLeft
-      TabOrder = 11
+      TabOrder = 12
     end
     object LabeledEdit18: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 281
       Width = 90
       Height = 21
@@ -216,21 +224,21 @@ object frmMain: TfrmMain
       EditLabel.Height = 13
       EditLabel.Caption = 'AVR'#32534#21495
       LabelPosition = lpLeft
-      TabOrder = 12
+      TabOrder = 13
     end
     object BitBtn14: TBitBtn
-      Left = 176
+      Left = 248
       Top = 42
       Width = 70
       Height = 40
       Caption = #20445#23384#27979#35797#21333
-      TabOrder = 14
+      TabOrder = 23
       OnClick = BitBtn14Click
     end
     object GroupBox7: TGroupBox
       Left = 1
       Top = 432
-      Width = 247
+      Width = 339
       Height = 149
       Align = alBottom
       Caption = #21442#25968#35774#32622
@@ -240,7 +248,7 @@ object frmMain: TfrmMain
       Font.Name = #23435#20307
       Font.Style = []
       ParentFont = False
-      TabOrder = 15
+      TabOrder = 24
       object Label31: TLabel
         Left = 186
         Top = 121
@@ -367,7 +375,7 @@ object frmMain: TfrmMain
       end
     end
     object LabeledEdit19: TLabeledEdit
-      Left = 84
+      Left = 102
       Top = 304
       Width = 90
       Height = 21
@@ -375,20 +383,119 @@ object frmMain: TfrmMain
       EditLabel.Height = 13
       EditLabel.Caption = #27979#35797#20154
       LabelPosition = lpLeft
-      TabOrder = 13
+      TabOrder = 14
+    end
+    object LabeledEdit4: TLabeledEdit
+      Left = 102
+      Top = 332
+      Width = 90
+      Height = 21
+      EditLabel.Width = 39
+      EditLabel.Height = 13
+      EditLabel.Caption = #30456#30005#27969
+      LabelPosition = lpLeft
+      TabOrder = 15
+    end
+    object LabeledEdit20: TLabeledEdit
+      Left = 102
+      Top = 356
+      Width = 90
+      Height = 21
+      EditLabel.Width = 52
+      EditLabel.Height = 13
+      EditLabel.Caption = #21151#29575#22240#25968
+      LabelPosition = lpLeft
+      TabOrder = 16
+    end
+    object LabeledEdit21: TLabeledEdit
+      Left = 102
+      Top = 380
+      Width = 90
+      Height = 21
+      EditLabel.Width = 26
+      EditLabel.Height = 13
+      EditLabel.Caption = #30456#25968
+      LabelPosition = lpLeft
+      TabOrder = 17
+    end
+    object LabeledEdit22: TLabeledEdit
+      Left = 102
+      Top = 404
+      Width = 90
+      Height = 21
+      EditLabel.Width = 52
+      EditLabel.Height = 13
+      EditLabel.Caption = #39069#23450#36716#36895
+      LabelPosition = lpLeft
+      TabOrder = 18
+    end
+    object LabeledEdit23: TLabeledEdit
+      Left = 248
+      Top = 332
+      Width = 90
+      Height = 21
+      EditLabel.Width = 39
+      EditLabel.Height = 13
+      EditLabel.Caption = #24037#20316#21046
+      LabelPosition = lpLeft
+      TabOrder = 19
+    end
+    object LabeledEdit24: TLabeledEdit
+      Left = 248
+      Top = 356
+      Width = 90
+      Height = 21
+      EditLabel.Width = 52
+      EditLabel.Height = 13
+      EditLabel.Caption = #32477#32536#31561#32423
+      LabelPosition = lpLeft
+      TabOrder = 20
+    end
+    object LabeledEdit25: TLabeledEdit
+      Left = 248
+      Top = 380
+      Width = 90
+      Height = 21
+      EditLabel.Width = 52
+      EditLabel.Height = 13
+      EditLabel.Caption = #38450#25252#31561#32423
+      LabelPosition = lpLeft
+      TabOrder = 21
+    end
+    object LabeledEdit26: TLabeledEdit
+      Left = 248
+      Top = 404
+      Width = 90
+      Height = 21
+      EditLabel.Width = 52
+      EditLabel.Height = 13
+      EditLabel.Caption = #29615#22659#28201#24230
+      LabelPosition = lpLeft
+      TabOrder = 22
+    end
+    object LabeledEdit27: TLabeledEdit
+      Left = 248
+      Top = 235
+      Width = 90
+      Height = 21
+      EditLabel.Width = 26
+      EditLabel.Height = 13
+      EditLabel.Caption = #36716#23376
+      LabelPosition = lpLeft
+      TabOrder = 11
     end
   end
   object Panel32: TPanel
-    Left = 249
+    Left = 341
     Top = 40
-    Width = 209
+    Width = 117
     Height = 582
     Align = alClient
     TabOrder = 2
     object DBGrid1: TDBGrid
       Left = 1
       Top = 54
-      Width = 207
+      Width = 115
       Height = 312
       Align = alClient
       Color = 16767438
@@ -404,7 +511,7 @@ object frmMain: TfrmMain
     object DBGrid2: TDBGrid
       Left = 1
       Top = 366
-      Width = 207
+      Width = 115
       Height = 170
       Align = alBottom
       Color = 16767438
@@ -420,7 +527,7 @@ object frmMain: TfrmMain
     object Panel34: TPanel
       Left = 1
       Top = 536
-      Width = 207
+      Width = 115
       Height = 45
       Align = alBottom
       Color = 16767438
@@ -437,7 +544,7 @@ object frmMain: TfrmMain
     object Panel35: TPanel
       Left = 1
       Top = 1
-      Width = 207
+      Width = 115
       Height = 53
       Align = alTop
       Color = 16767438
@@ -1553,6 +1660,15 @@ object frmMain: TfrmMain
     RebuildPrinter = False
     OnGetValue = frReport1GetValue
     Left = 313
+    Top = 288
+    ReportForm = {19000000}
+  end
+  object frReport2: TfrReport
+    InitialZoom = pzDefault
+    PreviewButtons = [pbZoom, pbLoad, pbSave, pbPrint, pbFind, pbHelp, pbExit]
+    RebuildPrinter = False
+    OnGetValue = frReport2GetValue
+    Left = 345
     Top = 288
     ReportForm = {19000000}
   end
